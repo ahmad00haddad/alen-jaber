@@ -75,6 +75,7 @@ function Index() {
       <Nav />
       <Hero />
       <Marquee />
+      <Manifesto />
       <Stats />
       <About />
       <Works />
@@ -84,6 +85,33 @@ function Index() {
       <BigMark />
       <Footer />
     </div>
+  );
+}
+
+// ============== MANIFESTO ==============
+function Manifesto() {
+  return (
+    <section className="px-5 md:px-10 lg:px-14 py-20 md:py-32 max-w-[1500px] mx-auto">
+      <motion.div
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={stagger}
+        className="grid grid-cols-12 gap-6 md:gap-10 items-start"
+      >
+        <motion.div variants={fadeUp} className="col-span-12 md:col-span-3 flex items-center gap-3">
+          <span className="h-px w-10 bg-brass" />
+          <span className="text-xs latin text-brass">— البيان</span>
+        </motion.div>
+        <motion.h2
+          variants={fadeUp}
+          className="col-span-12 md:col-span-9 font-display text-2xl md:text-4xl lg:text-5xl leading-[1.5] md:leading-[1.4]"
+        >
+          حيث تُولد <span className="text-brass">الصورة</span> من الفكرة،
+          وتُصاغ <span className="text-brass">الحكاية</span> بإيقاعٍ بصريٍّ راسخ.
+        </motion.h2>
+      </motion.div>
+    </section>
   );
 }
 
