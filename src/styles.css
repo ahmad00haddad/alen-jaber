@@ -67,7 +67,7 @@
   --ring: oklch(0.78 0.135 78);
 
   /* Cohesive type system. NOTE: never apply negative letter-spacing to Arabic — it disconnects letters. */
-  --font-display: 'Reem Kufi', 'IBM Plex Sans Arabic', system-ui, sans-serif;
+  --font-display: 'Cairo', 'IBM Plex Sans Arabic', system-ui, sans-serif;
   --font-body: 'IBM Plex Sans Arabic', 'Tajawal', system-ui, sans-serif;
   --font-mono-ar: 'Inter', system-ui, sans-serif;
 
