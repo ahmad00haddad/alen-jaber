@@ -222,15 +222,15 @@ function Hero() {
         </motion.div>
 
         {/* Name + photo composition */}
-        <div className="grid grid-cols-12 gap-4 md:gap-6 items-center">
+        <div className="grid grid-cols-12 gap-3 md:gap-6 items-center">
           {/* Right column on RTL = visually right: first name */}
           <motion.h1
             initial={{ opacity: 0, x: 60 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, ease: [0.22, 0.61, 0.36, 1], delay: 0.2 }}
-            className="col-span-12 md:col-span-5 font-display brass-gradient text-[22vw] md:text-[10rem] lg:text-[13rem] leading-[0.95] text-center md:text-right"
+            className="col-span-12 md:col-span-5 font-display brass-gradient text-[28vw] md:text-[clamp(5rem,11vw,11rem)] leading-[0.95] text-center md:text-right whitespace-nowrap"
           >
-            ألِــن
+            ألِن
           </motion.h1>
 
           {/* Image */}
@@ -238,12 +238,12 @@ function Hero() {
             initial={{ opacity: 0, scale: 0.85, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 1.1, ease: [0.22, 0.61, 0.36, 1], delay: 0.1 }}
-            className="col-span-12 md:col-span-2 flex justify-center order-first md:order-none"
+            className="col-span-12 md:col-span-2 flex justify-center order-first md:order-none my-6 md:my-0"
           >
-            <div className="relative w-[55%] md:w-full max-w-[260px] aspect-[3/4] animate-float">
+            <div className="relative w-[60%] sm:w-[45%] md:w-full max-w-[240px] aspect-[3/4] animate-float">
               <div className="absolute -inset-2 border border-brass/30" />
-              <div className="absolute -top-4 -right-4 w-16 h-16 border-t-2 border-r-2 border-brass" />
-              <div className="absolute -bottom-4 -left-4 w-16 h-16 border-b-2 border-l-2 border-brass" />
+              <div className="absolute -top-3 -right-3 w-12 h-12 border-t-2 border-r-2 border-brass" />
+              <div className="absolute -bottom-3 -left-3 w-12 h-12 border-b-2 border-l-2 border-brass" />
               <div className="relative w-full h-full overflow-hidden">
                 <img
                   src={alenAsset.url}
@@ -252,7 +252,7 @@ function Hero() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-transparent" />
               </div>
-              <span className="absolute bottom-3 right-3 text-[9px] latin text-brass bg-background/80 backdrop-blur px-2 py-1 border border-brass/30">
+              <span className="absolute bottom-2 right-2 text-[9px] latin text-brass bg-background/85 backdrop-blur px-2 py-1 border border-brass/30">
                 ALEN · 2026
               </span>
             </div>
@@ -263,7 +263,7 @@ function Hero() {
             initial={{ opacity: 0, x: -60 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, ease: [0.22, 0.61, 0.36, 1], delay: 0.2 }}
-            className="col-span-12 md:col-span-5 font-display brass-gradient text-[22vw] md:text-[10rem] lg:text-[13rem] leading-[0.95] text-center md:text-left"
+            className="col-span-12 md:col-span-5 font-display brass-gradient text-[28vw] md:text-[clamp(5rem,11vw,11rem)] leading-[0.95] text-center md:text-left whitespace-nowrap"
           >
             جابر
           </motion.h1>
