@@ -182,11 +182,11 @@ function Nav() {
 function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 150]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
+  const opacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
 
   return (
-    <section ref={ref} id="top" className="relative pt-32 md:pt-36 pb-16 md:pb-24 px-5 md:px-10 lg:px-14 grain">
+    <section ref={ref} id="top" className="relative pt-32 md:pt-36 pb-16 md:pb-24 px-5 md:px-10 lg:px-14 grain min-h-screen flex items-center">
       {/* corner markers */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -207,96 +207,114 @@ function Hero() {
         <span>NOW SHOWING</span>
       </motion.div>
 
-      <motion.div style={{ y, opacity }} className="relative max-w-[1500px] mx-auto">
-        {/* Top label */}
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          animate="show"
-          className="flex items-center gap-4 mb-8 md:mb-12"
-        >
-          <motion.span variants={fadeUp} className="h-px w-12 bg-brass" />
-          <motion.span variants={fadeUp} className="text-xs latin text-brass">
-            PORTFOLIO / DIRECTOR — PRODUCER
-          </motion.span>
-        </motion.div>
+      <motion.div style={{ y, opacity }} className="relative max-w-[1500px] mx-auto w-full">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 items-center">
+          {/* Text column */}
+          <div className="md:col-span-7 order-2 md:order-1 text-center md:text-right">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="flex items-center gap-3 justify-center md:justify-start mb-6"
+            >
+              <span className="h-px w-10 bg-brass" />
+              <span className="text-[11px] latin text-brass">PORTFOLIO · 2026</span>
+            </motion.div>
 
-        {/* Name + photo composition */}
-        <div className="grid grid-cols-12 gap-3 md:gap-6 items-center">
-          {/* Right column on RTL = visually right: first name */}
-          <motion.h1
-            initial={{ opacity: 0, x: 60 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, ease: [0.22, 0.61, 0.36, 1], delay: 0.2 }}
-            className="col-span-12 md:col-span-5 font-display brass-gradient text-[28vw] md:text-[clamp(5rem,11vw,11rem)] leading-[0.95] text-center md:text-right whitespace-nowrap"
-          >
-            ألِن
-          </motion.h1>
+            <motion.h1
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: [0.22, 0.61, 0.36, 1], delay: 0.3 }}
+              className="font-display font-black brass-gradient text-[20vw] md:text-[clamp(4.5rem,9vw,9rem)] leading-[1.05]"
+              style={{ wordSpacing: "-0.05em" }}
+            >
+              ألِن جابر
+            </motion.h1>
 
-          {/* Image */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="font-display text-lg md:text-2xl text-foreground/90 mt-4 md:mt-6 leading-relaxed"
+            >
+              مخرج · منتج محتوى · صانع صورة
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+              className="mt-8 md:mt-10 flex flex-wrap items-center gap-4 justify-center md:justify-start"
+            >
+              <a
+                href="#works"
+                className="group inline-flex items-center gap-3 brass-bg text-brass-foreground px-6 py-3 font-display text-sm md:text-base hover:gap-5 transition-all duration-500"
+              >
+                شاهد الأعمال
+                <ArrowUpLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+              </a>
+              <a
+                href="#contact"
+                className="inline-flex items-center gap-3 border border-brass/60 text-brass px-6 py-3 font-display text-sm md:text-base hover:bg-brass/10 transition-colors"
+              >
+                <Mail className="w-4 h-4" />
+                للتعاون
+              </a>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 1.2 }}
+              className="mt-12 md:mt-14 flex items-center gap-6 md:gap-10 justify-center md:justify-start text-xs latin text-muted-foreground border-t border-border pt-6"
+            >
+              <span>FOX MULTIMEDIA</span>
+              <span className="w-1 h-1 rounded-full bg-brass" />
+              <span>IRBID · JORDAN</span>
+              <span className="w-1 h-1 rounded-full bg-brass hidden sm:inline" />
+              <span className="hidden sm:inline">EST. 2018</span>
+            </motion.div>
+          </div>
+
+          {/* Image column */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.85, y: 30 }}
+            initial={{ opacity: 0, scale: 0.92, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 1.1, ease: [0.22, 0.61, 0.36, 1], delay: 0.1 }}
-            className="col-span-12 md:col-span-2 flex justify-center order-first md:order-none my-6 md:my-0"
+            className="md:col-span-5 order-1 md:order-2 flex justify-center md:justify-end"
           >
-            <div className="relative w-[60%] sm:w-[45%] md:w-full max-w-[240px] aspect-[3/4] animate-float">
-              <div className="absolute -inset-2 border border-brass/30" />
-              <div className="absolute -top-3 -right-3 w-12 h-12 border-t-2 border-r-2 border-brass" />
-              <div className="absolute -bottom-3 -left-3 w-12 h-12 border-b-2 border-l-2 border-brass" />
+            <div className="relative w-[70%] sm:w-[55%] md:w-full max-w-[420px] aspect-[3/4] animate-float">
+              <div className="absolute -inset-3 border border-brass/30" />
+              <div className="absolute -top-5 -right-5 w-20 h-20 border-t-2 border-r-2 border-brass" />
+              <div className="absolute -bottom-5 -left-5 w-20 h-20 border-b-2 border-l-2 border-brass" />
               <div className="relative w-full h-full overflow-hidden">
                 <img
                   src={alenAsset.url}
                   alt="ألِن جابر"
                   className="w-full h-full object-cover grayscale contrast-125 brightness-95"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
               </div>
-              <span className="absolute bottom-2 right-2 text-[9px] latin text-brass bg-background/85 backdrop-blur px-2 py-1 border border-brass/30">
-                ALEN · 2026
-              </span>
+              <div className="absolute bottom-3 right-3 flex items-center gap-2 text-[10px] latin text-brass bg-background/85 backdrop-blur px-3 py-1.5 border border-brass/30">
+                <span className="w-1.5 h-1.5 rounded-full bg-brass animate-pulse" />
+                ALEN · ON SET
+              </div>
+              <div className="absolute -bottom-3 right-1/2 translate-x-1/2 md:right-auto md:left-1/2 md:translate-x-0 md:-translate-x-1/2 latin text-[10px] tracking-[0.3em] text-muted-foreground whitespace-nowrap bg-background px-3">
+                01 / 01
+              </div>
             </div>
           </motion.div>
-
-          {/* Left column = last name */}
-          <motion.h1
-            initial={{ opacity: 0, x: -60 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, ease: [0.22, 0.61, 0.36, 1], delay: 0.2 }}
-            className="col-span-12 md:col-span-5 font-display brass-gradient text-[28vw] md:text-[clamp(5rem,11vw,11rem)] leading-[0.95] text-center md:text-left whitespace-nowrap"
-          >
-            جابر
-          </motion.h1>
         </div>
 
-        {/* Tagline */}
+        {/* Scroll indicator */}
         <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={stagger}
-          className="mt-16 md:mt-24 grid grid-cols-12 gap-6 items-end"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5, duration: 0.8 }}
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-[10px] latin text-muted-foreground"
         >
-          <motion.div variants={fadeUp} className="col-span-12 md:col-span-3 flex items-center gap-3">
-            <span className="h-px w-8 bg-brass" />
-            <span className="text-xs latin text-brass">— البيان</span>
-          </motion.div>
-          <motion.h2
-            variants={fadeUp}
-            className="col-span-12 md:col-span-7 font-display text-2xl md:text-4xl lg:text-5xl leading-[1.4] md:leading-[1.3]"
-          >
-            حيث تُولد <span className="text-brass">الصورة</span> من الفكرة،
-            وتُصاغ <span className="text-brass">الحكاية</span> بإيقاعٍ بصريٍّ راسخ.
-          </motion.h2>
-          <motion.div variants={fadeUp} className="col-span-12 md:col-span-2 flex md:justify-end">
-            <a
-              href="#works"
-              className="group relative w-24 h-24 md:w-28 md:h-28 rounded-full border border-brass flex items-center justify-center text-brass hover:bg-brass hover:text-brass-foreground transition-all duration-500"
-            >
-              <Play className="w-5 h-5 md:w-6 md:h-6 fill-current relative z-10" />
-              <span className="absolute inset-0 rounded-full border border-brass/40 pulse-ring" />
-            </a>
-          </motion.div>
+          <span>SCROLL</span>
+          <span className="w-px h-10 bg-gradient-to-b from-brass to-transparent" />
         </motion.div>
       </motion.div>
     </section>
