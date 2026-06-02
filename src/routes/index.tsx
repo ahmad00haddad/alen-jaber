@@ -253,9 +253,9 @@ function Hero() {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.22, 0.61, 0.36, 1], delay: 0.3 }}
-              className="font-display font-black brass-gradient text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] leading-[1.1]"
+              className="font-display font-black brass-gradient text-6xl sm:text-7xl md:text-8xl lg:text-9xl leading-[1.1]"
             >
-              ألِن جابر
+              ألن جابر
             </motion.h1>
 
             <motion.p
