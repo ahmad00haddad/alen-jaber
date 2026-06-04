@@ -21,7 +21,7 @@ export type SettingKey = typeof SETTING_KEYS[number];
 export type SettingsMap = Record<string, Record<string, any>>;
 
 async function fetchSettings(): Promise<SettingsMap> {
-  const { data, error } = await supabase.from("site_settings").select("key,value");
+  const { data, error } = await (supabase as any).from("site_settings").select("key,value");
   if (error) throw error;
   const map: SettingsMap = {};
   (data ?? []).forEach((r: any) => { map[r.key] = r.value ?? {}; });
@@ -36,7 +36,7 @@ function listQuery<T>(table: string, key: string) {
   return useQuery({
     queryKey: [key],
     queryFn: async () => {
-      const { data, error } = await supabase.from(table).select("*").order("sort_order", { ascending: true });
+      const { data, error } = await (supabase as any).from(table).select("*").order("sort_order", { ascending: true });
       if (error) throw error;
       return (data ?? []) as T[];
     },
