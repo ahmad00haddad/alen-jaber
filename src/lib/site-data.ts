@@ -1,0 +1,52 @@
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
+
+export type Project = {
+  id: string; num: string; title: string; tag: string; year: string;
+  featured: boolean; link: string | null; sort_order: number;
+};
+export type Testimonial = { id: string; quote: string; name: string; role: string; sort_order: number };
+export type Stat = { id: string; number: string; label: string; is_latin: boolean; sort_order: number };
+export type ProcessStep = { id: string; num: string; title: string; description: string; sort_order: number };
+export type Service = { id: string; name: string; sort_order: number };
+export type MarqueeWord = { id: string; word: string; sort_order: number };
+export type NavLink = { id: string; href: string; label: string; sort_order: number };
+
+export const SETTING_KEYS = [
+  "hero","manifesto","about","process_intro","voices_intro",
+  "contact","big_mark","footer","social","meta",
+] as const;
+export type SettingKey = typeof SETTING_KEYS[number];
+
+export type SettingsMap = Record<string, Record<string, any>>;
+
+async function fetchSettings(): Promise<SettingsMap> {
+  const { data, error } = await supabase.from("site_settings").select("key,value");
+  if (error) throw error;
+  const map: SettingsMap = {};
+  (data ?? []).forEach((r: any) => { map[r.key] = r.value ?? {}; });
+  return map;
+}
+
+export function useSettings() {
+  return useQuery({ queryKey: ["site_settings"], queryFn: fetchSettings });
+}
+
+function listQuery<T>(table: string, key: string) {
+  return useQuery({
+    queryKey: [key],
+    queryFn: async () => {
+      const { data, error } = await supabase.from(table).select("*").order("sort_order", { ascending: true });
+      if (error) throw error;
+      return (data ?? []) as T[];
+    },
+  });
+}
+
+export const useProjects = () => listQuery<Project>("projects", "projects");
+export const useTestimonials = () => listQuery<Testimonial>("testimonials", "testimonials");
+export const useStats = () => listQuery<Stat>("stats", "stats");
+export const useProcessSteps = () => listQuery<ProcessStep>("process_steps", "process_steps");
+export const useServices = () => listQuery<Service>("services", "services");
+export const useMarqueeWords = () => listQuery<MarqueeWord>("marquee_words", "marquee_words");
+export const useNavLinks = () => listQuery<NavLink>("nav_links", "nav_links");
