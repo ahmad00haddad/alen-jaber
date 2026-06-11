@@ -176,11 +176,11 @@ function Hero({ hero, meta }: { hero: any; meta: any }) {
     <section ref={ref} id="top" className="relative pt-32 md:pt-36 pb-16 md:pb-24 px-5 md:px-10 lg:px-14 grain min-h-screen flex items-center">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1, duration: 0.8 }}
         className="absolute top-28 left-10 hidden md:flex flex-col gap-1 text-[10px] latin text-muted-foreground">
-        <span>© 2026</span><span>IRBID — JORDAN</span>
+        <span>{meta.corner_tl1 ?? "© 2026"}</span><span>{meta.corner_tl2 ?? "IRBID — JORDAN"}</span>
       </motion.div>
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1, duration: 0.8 }}
         className="absolute top-28 right-10 hidden md:flex flex-col gap-1 text-[10px] latin text-brass text-left">
-        <span>REEL · 001</span><span>NOW SHOWING</span>
+        <span>{meta.corner_tr1 ?? "REEL · 001"}</span><span>{meta.corner_tr2 ?? "NOW SHOWING"}</span>
       </motion.div>
 
       <motion.div style={{ y, opacity }} className="relative max-w-[1500px] mx-auto w-full">
