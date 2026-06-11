@@ -125,9 +125,9 @@ function Nav({ navItems, cta }: { navItems: { href: string; label: string }[]; c
             ))}
           </nav>
           <div className="flex items-center gap-3">
-            <a href="#contact"
+            <a href={ctaHref}
               className="hidden sm:inline-flex items-center gap-2 text-xs latin border border-brass/50 px-4 py-2 text-brass hover:bg-brass hover:text-brass-foreground transition-all duration-300">
-              متاح للعمل
+              {ctaLabel}
               <span className="w-1.5 h-1.5 rounded-full bg-brass" />
             </a>
             <button aria-label="menu" onClick={() => setOpen(true)} className="md:hidden text-brass p-2">
