@@ -515,10 +515,10 @@ function Footer({ footer, social, navItems }:
           <p className="font-display text-brass text-2xl mb-3">{footer.name ?? "ألِن جابر"}</p>
           <p className="text-sm text-muted-foreground leading-[1.85]">{footer.description ?? ""}</p>
         </div>
-        <FooterCol title="روابط" items={navItems.map((l) => l.label)} hrefs={navItems.map((l) => l.href)} />
-        <FooterCol title="الخدمات" items={services.length ? services.map((s) => s.name) : []} />
+        <FooterCol title={footer.links_title ?? "روابط"} items={navItems.map((l) => l.label)} hrefs={navItems.map((l) => l.href)} />
+        <FooterCol title={footer.services_title ?? "الخدمات"} items={services.length ? services.map((s) => s.name) : []} />
         <div>
-          <p className="text-brass text-xs latin mb-4">تواصل</p>
+          <p className="text-brass text-xs latin mb-4">{footer.contact_title ?? "تواصل"}</p>
           <ul className="space-y-2 text-sm">
             {footer.location && <li className="text-muted-foreground">{footer.location}</li>}
             {footer.company && <li className="latin text-muted-foreground">{footer.company}</li>}
