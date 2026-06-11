@@ -159,6 +159,21 @@ const CONTENT_SECTIONS: { key: string; title: string; fields: FieldDef[] }[] = [
     { k: "badge", l: "شارة فوق الصورة" },
     { k: "image_url", l: "رابط صورة البطل", type: "url" },
   ]},
+  { key: "hero_meta", title: "تفاصيل البطل الجانبية", fields: [
+    { k: "corner_tl1", l: "زاوية يسار-علوي (سطر ١)" },
+    { k: "corner_tl2", l: "زاوية يسار-علوي (سطر ٢)" },
+    { k: "corner_tr1", l: "زاوية يمين-علوي (سطر ١)" },
+    { k: "corner_tr2", l: "زاوية يمين-علوي (سطر ٢)" },
+    { k: "image_index", l: "ترقيم الصورة (01 / 01)" },
+    { k: "scroll_text", l: "نص التمرير (SCROLL)" },
+    { k: "strip_1", l: "شريط سفلي ١" },
+    { k: "strip_2", l: "شريط سفلي ٢" },
+    { k: "strip_3", l: "شريط سفلي ٣" },
+  ]},
+  { key: "nav_cta", title: "زر القائمة العلوي", fields: [
+    { k: "label", l: "النص" },
+    { k: "href", l: "الرابط" },
+  ]},
   { key: "manifesto", title: "البيان", fields: [
     { k: "label", l: "اللصيقة الجانبية" },
     { k: "text", l: "النص", type: "textarea" },
@@ -173,6 +188,11 @@ const CONTENT_SECTIONS: { key: string; title: string; fields: FieldDef[] }[] = [
     { k: "education", l: "التعليم" },
     { k: "degree", l: "الشهادة" },
     { k: "status", l: "الحالة" },
+  ]},
+  { key: "works_intro", title: "مقدمة الأعمال", fields: [
+    { k: "label", l: "اللصيقة" },
+    { k: "headline", l: "العنوان" },
+    { k: "year_range", l: "نطاق السنوات" },
   ]},
   { key: "process_intro", title: "مقدمة المسار", fields: [
     { k: "label", l: "اللصيقة" },
@@ -196,6 +216,9 @@ const CONTENT_SECTIONS: { key: string; title: string; fields: FieldDef[] }[] = [
   { key: "footer", title: "التذييل", fields: [
     { k: "name", l: "الاسم" },
     { k: "description", l: "الوصف", type: "textarea" },
+    { k: "links_title", l: "عنوان عمود الروابط" },
+    { k: "services_title", l: "عنوان عمود الخدمات" },
+    { k: "contact_title", l: "عنوان عمود التواصل" },
     { k: "location", l: "الموقع" },
     { k: "company", l: "الجهة" },
     { k: "copyright", l: "حقوق النشر" },
