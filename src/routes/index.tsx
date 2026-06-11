@@ -249,7 +249,7 @@ function Hero({ hero, meta }: { hero: any; meta: any }) {
 
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 0.8 }}
           className="absolute bottom-0 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-[10px] latin text-muted-foreground">
-          <span>SCROLL</span>
+          <span>{meta.scroll_text ?? "SCROLL"}</span>
           <span className="w-px h-10 bg-gradient-to-b from-brass to-transparent" />
         </motion.div>
       </motion.div>
