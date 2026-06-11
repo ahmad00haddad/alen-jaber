@@ -51,3 +51,38 @@ export const useProcessSteps = () => listQuery<ProcessStep>("process_steps", "pr
 export const useServices = () => listQuery<Service>("services", "services");
 export const useMarqueeWords = () => listQuery<MarqueeWord>("marquee_words", "marquee_words");
 export const useNavLinks = () => listQuery<NavLink>("nav_links", "nav_links");
+
+import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+
+/**
+ * Live-syncs all site content: any change made in the admin panel
+ * is pushed via Supabase Realtime and refetches the relevant query.
+ */
+export function useLiveSiteContent() {
+  const qc = useQueryClient();
+  useEffect(() => {
+    const tableToKey: Record<string, string> = {
+      site_settings: "site_settings",
+      projects: "projects",
+      testimonials: "testimonials",
+      stats: "stats",
+      process_steps: "process_steps",
+      services: "services",
+      marquee_words: "marquee_words",
+      nav_links: "nav_links",
+    };
+    const channel = supabase
+      .channel("site-live")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public" },
+        (payload: any) => {
+          const key = tableToKey[payload.table];
+          if (key) qc.invalidateQueries({ queryKey: [key] });
+        }
+      )
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [qc]);
+}
