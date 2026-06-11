@@ -241,7 +241,7 @@ function Hero({ hero, meta }: { hero: any; meta: any }) {
                 {badge}
               </div>
               <div className="absolute -bottom-3 right-1/2 translate-x-1/2 md:right-auto md:left-1/2 md:translate-x-0 md:-translate-x-1/2 latin text-[10px] tracking-[0.3em] text-muted-foreground whitespace-nowrap bg-background px-3">
-                01 / 01
+                {meta.image_index ?? "01 / 01"}
               </div>
             </div>
           </motion.div>
