@@ -217,11 +217,11 @@ function Hero({ hero, meta }: { hero: any; meta: any }) {
             </motion.div>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 1.2 }}
               className="mt-12 md:mt-14 flex items-center gap-6 md:gap-10 justify-center md:justify-start text-xs latin text-muted-foreground border-t border-border pt-6">
-              <span>FOX MULTIMEDIA</span>
+              <span>{meta.strip_1 ?? "FOX MULTIMEDIA"}</span>
               <span className="w-1 h-1 rounded-full bg-brass" />
-              <span>IRBID · JORDAN</span>
+              <span>{meta.strip_2 ?? "IRBID · JORDAN"}</span>
               <span className="w-1 h-1 rounded-full bg-brass hidden sm:inline" />
-              <span className="hidden sm:inline">EST. 2018</span>
+              <span className="hidden sm:inline">{meta.strip_3 ?? "EST. 2018"}</span>
             </motion.div>
           </div>
 
