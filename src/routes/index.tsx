@@ -44,19 +44,20 @@ const stagger: Variants = {
 
 // ============== PAGE ==============
 function Index() {
+  useLiveSiteContent();
   const { data: settings } = useSettings();
   const navLinks = useNavLinks().data;
   const navItems = (navLinks && navLinks.length ? navLinks.map((n) => ({ href: n.href, label: n.label })) : DEF_NAV);
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      <Nav navItems={navItems} />
-      <Hero hero={settings?.hero ?? {}} />
+      <Nav navItems={navItems} cta={settings?.nav_cta ?? {}} />
+      <Hero hero={settings?.hero ?? {}} meta={settings?.hero_meta ?? {}} />
       <Marquee />
       <Manifesto manifesto={settings?.manifesto ?? {}} />
       <Stats />
       <About about={settings?.about ?? {}} />
-      <Works />
+      <Works intro={settings?.works_intro ?? {}} />
       <Process intro={settings?.process_intro ?? {}} />
       <Voices intro={settings?.voices_intro ?? {}} />
       <Contact contact={settings?.contact ?? {}} />
