@@ -340,22 +340,25 @@ function Meta({ k, v, highlight, latin }: { k: string; v: string; highlight?: bo
 }
 
 // ============== WORKS ==============
-function Works() {
+function Works({ intro }: { intro: any }) {
   const { data } = useProjects();
   const projects = data ?? [];
+  const label = intro.label ?? "— الأعمال / 02";
+  const headline = intro.headline ?? "أعمالٌ مختارة";
+  const yearRange = intro.year_range ?? "2023 — 2026";
   return (
     <section id="works" className="px-5 md:px-10 lg:px-14 py-20 md:py-32 border-t border-border">
       <div className="max-w-[1500px] mx-auto">
         <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-80px" }} variants={stagger}
           className="flex items-end justify-between mb-10 md:mb-14 gap-6">
           <div>
-            <motion.p variants={fadeUp} className="text-xs latin text-brass mb-4">— الأعمال / 02</motion.p>
+            <motion.p variants={fadeUp} className="text-xs latin text-brass mb-4">{label}</motion.p>
             <motion.h2 variants={fadeUp} className="font-display text-4xl md:text-6xl lg:text-7xl brass-gradient">
-              أعمالٌ مختارة
+              {headline}
             </motion.h2>
           </div>
           <motion.span variants={fadeUp} className="text-xs latin text-muted-foreground hidden md:block whitespace-nowrap">
-            2023 — 2026
+            {yearRange}
           </motion.span>
         </motion.div>
         <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-50px" }} variants={stagger}
