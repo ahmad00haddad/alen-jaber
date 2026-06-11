@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 export type Project = {
   id: string; num: string; title: string; tag: string; year: string;
@@ -13,8 +14,9 @@ export type MarqueeWord = { id: string; word: string; sort_order: number };
 export type NavLink = { id: string; href: string; label: string; sort_order: number };
 
 export const SETTING_KEYS = [
-  "hero","manifesto","about","process_intro","voices_intro",
-  "contact","big_mark","footer","social","meta",
+  "hero","hero_meta","manifesto","about","works_intro",
+  "process_intro","voices_intro","contact","big_mark","footer",
+  "social","meta","nav_cta",
 ] as const;
 export type SettingKey = typeof SETTING_KEYS[number];
 
@@ -50,3 +52,37 @@ export const useProcessSteps = () => listQuery<ProcessStep>("process_steps", "pr
 export const useServices = () => listQuery<Service>("services", "services");
 export const useMarqueeWords = () => listQuery<MarqueeWord>("marquee_words", "marquee_words");
 export const useNavLinks = () => listQuery<NavLink>("nav_links", "nav_links");
+
+
+
+/**
+ * Live-syncs all site content: any change made in the admin panel
+ * is pushed via Supabase Realtime and refetches the relevant query.
+ */
+export function useLiveSiteContent() {
+  const qc = useQueryClient();
+  useEffect(() => {
+    const tableToKey: Record<string, string> = {
+      site_settings: "site_settings",
+      projects: "projects",
+      testimonials: "testimonials",
+      stats: "stats",
+      process_steps: "process_steps",
+      services: "services",
+      marquee_words: "marquee_words",
+      nav_links: "nav_links",
+    };
+    const channel = supabase
+      .channel("site-live")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public" },
+        (payload: any) => {
+          const key = tableToKey[payload.table];
+          if (key) qc.invalidateQueries({ queryKey: [key] });
+        }
+      )
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [qc]);
+}

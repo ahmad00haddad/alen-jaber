@@ -6,6 +6,7 @@ import { ArrowUpLeft, Plus, Linkedin, Instagram, Mail, Menu, X } from "lucide-re
 import {
   useSettings, useProjects, useStats, useProcessSteps,
   useTestimonials, useServices, useMarqueeWords, useNavLinks,
+  useLiveSiteContent,
 } from "@/lib/site-data";
 
 export const Route = createFileRoute("/")({
@@ -43,19 +44,20 @@ const stagger: Variants = {
 
 // ============== PAGE ==============
 function Index() {
+  useLiveSiteContent();
   const { data: settings } = useSettings();
   const navLinks = useNavLinks().data;
   const navItems = (navLinks && navLinks.length ? navLinks.map((n) => ({ href: n.href, label: n.label })) : DEF_NAV);
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      <Nav navItems={navItems} />
-      <Hero hero={settings?.hero ?? {}} />
+      <Nav navItems={navItems} cta={settings?.nav_cta ?? {}} />
+      <Hero hero={settings?.hero ?? {}} meta={settings?.hero_meta ?? {}} />
       <Marquee />
       <Manifesto manifesto={settings?.manifesto ?? {}} />
       <Stats />
       <About about={settings?.about ?? {}} />
-      <Works />
+      <Works intro={settings?.works_intro ?? {}} />
       <Process intro={settings?.process_intro ?? {}} />
       <Voices intro={settings?.voices_intro ?? {}} />
       <Contact contact={settings?.contact ?? {}} />
@@ -87,7 +89,9 @@ function Manifesto({ manifesto }: { manifesto: any }) {
 }
 
 // ============== NAV ==============
-function Nav({ navItems }: { navItems: { href: string; label: string }[] }) {
+function Nav({ navItems, cta }: { navItems: { href: string; label: string }[]; cta: any }) {
+  const ctaLabel = cta?.label ?? "متاح للعمل";
+  const ctaHref = cta?.href ?? "#contact";
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -121,9 +125,9 @@ function Nav({ navItems }: { navItems: { href: string; label: string }[] }) {
             ))}
           </nav>
           <div className="flex items-center gap-3">
-            <a href="#contact"
+            <a href={ctaHref}
               className="hidden sm:inline-flex items-center gap-2 text-xs latin border border-brass/50 px-4 py-2 text-brass hover:bg-brass hover:text-brass-foreground transition-all duration-300">
-              متاح للعمل
+              {ctaLabel}
               <span className="w-1.5 h-1.5 rounded-full bg-brass" />
             </a>
             <button aria-label="menu" onClick={() => setOpen(true)} className="md:hidden text-brass p-2">
@@ -154,7 +158,7 @@ function Nav({ navItems }: { navItems: { href: string; label: string }[] }) {
 }
 
 // ============== HERO ==============
-function Hero({ hero }: { hero: any }) {
+function Hero({ hero, meta }: { hero: any; meta: any }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
@@ -172,11 +176,11 @@ function Hero({ hero }: { hero: any }) {
     <section ref={ref} id="top" className="relative pt-32 md:pt-36 pb-16 md:pb-24 px-5 md:px-10 lg:px-14 grain min-h-screen flex items-center">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1, duration: 0.8 }}
         className="absolute top-28 left-10 hidden md:flex flex-col gap-1 text-[10px] latin text-muted-foreground">
-        <span>© 2026</span><span>IRBID — JORDAN</span>
+        <span>{meta.corner_tl1 ?? "© 2026"}</span><span>{meta.corner_tl2 ?? "IRBID — JORDAN"}</span>
       </motion.div>
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1, duration: 0.8 }}
         className="absolute top-28 right-10 hidden md:flex flex-col gap-1 text-[10px] latin text-brass text-left">
-        <span>REEL · 001</span><span>NOW SHOWING</span>
+        <span>{meta.corner_tr1 ?? "REEL · 001"}</span><span>{meta.corner_tr2 ?? "NOW SHOWING"}</span>
       </motion.div>
 
       <motion.div style={{ y, opacity }} className="relative max-w-[1500px] mx-auto w-full">
@@ -213,11 +217,11 @@ function Hero({ hero }: { hero: any }) {
             </motion.div>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 1.2 }}
               className="mt-12 md:mt-14 flex items-center gap-6 md:gap-10 justify-center md:justify-start text-xs latin text-muted-foreground border-t border-border pt-6">
-              <span>FOX MULTIMEDIA</span>
+              <span>{meta.strip_1 ?? "FOX MULTIMEDIA"}</span>
               <span className="w-1 h-1 rounded-full bg-brass" />
-              <span>IRBID · JORDAN</span>
+              <span>{meta.strip_2 ?? "IRBID · JORDAN"}</span>
               <span className="w-1 h-1 rounded-full bg-brass hidden sm:inline" />
-              <span className="hidden sm:inline">EST. 2018</span>
+              <span className="hidden sm:inline">{meta.strip_3 ?? "EST. 2018"}</span>
             </motion.div>
           </div>
 
@@ -237,7 +241,7 @@ function Hero({ hero }: { hero: any }) {
                 {badge}
               </div>
               <div className="absolute -bottom-3 right-1/2 translate-x-1/2 md:right-auto md:left-1/2 md:translate-x-0 md:-translate-x-1/2 latin text-[10px] tracking-[0.3em] text-muted-foreground whitespace-nowrap bg-background px-3">
-                01 / 01
+                {meta.image_index ?? "01 / 01"}
               </div>
             </div>
           </motion.div>
@@ -245,7 +249,7 @@ function Hero({ hero }: { hero: any }) {
 
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 0.8 }}
           className="absolute bottom-0 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-[10px] latin text-muted-foreground">
-          <span>SCROLL</span>
+          <span>{meta.scroll_text ?? "SCROLL"}</span>
           <span className="w-px h-10 bg-gradient-to-b from-brass to-transparent" />
         </motion.div>
       </motion.div>
@@ -336,22 +340,25 @@ function Meta({ k, v, highlight, latin }: { k: string; v: string; highlight?: bo
 }
 
 // ============== WORKS ==============
-function Works() {
+function Works({ intro }: { intro: any }) {
   const { data } = useProjects();
   const projects = data ?? [];
+  const label = intro.label ?? "— الأعمال / 02";
+  const headline = intro.headline ?? "أعمالٌ مختارة";
+  const yearRange = intro.year_range ?? "2023 — 2026";
   return (
     <section id="works" className="px-5 md:px-10 lg:px-14 py-20 md:py-32 border-t border-border">
       <div className="max-w-[1500px] mx-auto">
         <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-80px" }} variants={stagger}
           className="flex items-end justify-between mb-10 md:mb-14 gap-6">
           <div>
-            <motion.p variants={fadeUp} className="text-xs latin text-brass mb-4">— الأعمال / 02</motion.p>
+            <motion.p variants={fadeUp} className="text-xs latin text-brass mb-4">{label}</motion.p>
             <motion.h2 variants={fadeUp} className="font-display text-4xl md:text-6xl lg:text-7xl brass-gradient">
-              أعمالٌ مختارة
+              {headline}
             </motion.h2>
           </div>
           <motion.span variants={fadeUp} className="text-xs latin text-muted-foreground hidden md:block whitespace-nowrap">
-            2023 — 2026
+            {yearRange}
           </motion.span>
         </motion.div>
         <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-50px" }} variants={stagger}
@@ -508,10 +515,10 @@ function Footer({ footer, social, navItems }:
           <p className="font-display text-brass text-2xl mb-3">{footer.name ?? "ألِن جابر"}</p>
           <p className="text-sm text-muted-foreground leading-[1.85]">{footer.description ?? ""}</p>
         </div>
-        <FooterCol title="روابط" items={navItems.map((l) => l.label)} hrefs={navItems.map((l) => l.href)} />
-        <FooterCol title="الخدمات" items={services.length ? services.map((s) => s.name) : []} />
+        <FooterCol title={footer.links_title ?? "روابط"} items={navItems.map((l) => l.label)} hrefs={navItems.map((l) => l.href)} />
+        <FooterCol title={footer.services_title ?? "الخدمات"} items={services.length ? services.map((s) => s.name) : []} />
         <div>
-          <p className="text-brass text-xs latin mb-4">تواصل</p>
+          <p className="text-brass text-xs latin mb-4">{footer.contact_title ?? "تواصل"}</p>
           <ul className="space-y-2 text-sm">
             {footer.location && <li className="text-muted-foreground">{footer.location}</li>}
             {footer.company && <li className="latin text-muted-foreground">{footer.company}</li>}
