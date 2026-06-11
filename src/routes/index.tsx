@@ -89,7 +89,9 @@ function Manifesto({ manifesto }: { manifesto: any }) {
 }
 
 // ============== NAV ==============
-function Nav({ navItems }: { navItems: { href: string; label: string }[] }) {
+function Nav({ navItems, cta }: { navItems: { href: string; label: string }[]; cta: any }) {
+  const ctaLabel = cta?.label ?? "متاح للعمل";
+  const ctaHref = cta?.href ?? "#contact";
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
