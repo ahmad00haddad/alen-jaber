@@ -13,8 +13,9 @@ export type MarqueeWord = { id: string; word: string; sort_order: number };
 export type NavLink = { id: string; href: string; label: string; sort_order: number };
 
 export const SETTING_KEYS = [
-  "hero","manifesto","about","process_intro","voices_intro",
-  "contact","big_mark","footer","social","meta",
+  "hero","hero_meta","manifesto","about","works_intro",
+  "process_intro","voices_intro","contact","big_mark","footer",
+  "social","meta","nav_cta",
 ] as const;
 export type SettingKey = typeof SETTING_KEYS[number];
 
