@@ -53,8 +53,7 @@ export const useServices = () => listQuery<Service>("services", "services");
 export const useMarqueeWords = () => listQuery<MarqueeWord>("marquee_words", "marquee_words");
 export const useNavLinks = () => listQuery<NavLink>("nav_links", "nav_links");
 
-import { useEffect } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+
 
 /**
  * Live-syncs all site content: any change made in the admin panel
