@@ -6,6 +6,7 @@ import { ArrowUpLeft, Plus, Linkedin, Instagram, Mail, Menu, X } from "lucide-re
 import {
   useSettings, useProjects, useStats, useProcessSteps,
   useTestimonials, useServices, useMarqueeWords, useNavLinks,
+  useLiveSiteContent,
 } from "@/lib/site-data";
 
 export const Route = createFileRoute("/")({
