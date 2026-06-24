@@ -632,8 +632,8 @@ function BigMark({ big }: { big: any }) {
 }
 
 // ============== FOOTER ==============
-function Footer({ footer, social, navItems }:
-  { footer: any; social: any; navItems: { href: string; label: string }[] }) {
+function Footer({ footer, social, navItems, cv }:
+  { footer: any; social: any; navItems: { href: string; label: string }[]; cv: any }) {
   const services = useServices().data ?? [];
   return (
     <footer className="px-5 md:px-10 lg:px-14 py-14 md:py-16 border-t border-border">
@@ -641,6 +641,12 @@ function Footer({ footer, social, navItems }:
         <div>
           <p className="font-display text-brass text-2xl mb-3">{footer.name ?? "ألِن جابر"}</p>
           <p className="text-sm text-muted-foreground leading-[1.85]">{footer.description ?? ""}</p>
+          {cv?.url && (
+            <a href={cv.url} download
+              className="mt-5 inline-flex items-center gap-2 text-xs latin text-brass border border-brass/40 px-3 py-2 hover:bg-brass hover:text-brass-foreground transition-colors">
+              <Download className="w-3.5 h-3.5" /> {cv.label ?? "Download CV"}
+            </a>
+          )}
         </div>
         <FooterCol title={footer.links_title ?? "روابط"} items={navItems.map((l) => l.label)} hrefs={navItems.map((l) => l.href)} />
         <FooterCol title={footer.services_title ?? "الخدمات"} items={services.length ? services.map((s) => s.name) : []} />
