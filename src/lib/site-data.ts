@@ -12,11 +12,13 @@ export type ProcessStep = { id: string; num: string; title: string; description:
 export type Service = { id: string; name: string; sort_order: number };
 export type MarqueeWord = { id: string; word: string; sort_order: number };
 export type NavLink = { id: string; href: string; label: string; sort_order: number };
+export type Experience = { id: string; role: string; company: string; period: string; location: string; bullets: string[]; sort_order: number };
+export type Skill = { id: string; category: string; items: string[]; sort_order: number };
 
 export const SETTING_KEYS = [
   "hero","hero_meta","manifesto","about","works_intro",
-  "process_intro","voices_intro","contact","big_mark","footer",
-  "social","meta","nav_cta",
+  "process_intro","voices_intro","experience_intro","skills_intro",
+  "contact","big_mark","footer","social","meta","nav_cta","cv",
 ] as const;
 export type SettingKey = typeof SETTING_KEYS[number];
 
