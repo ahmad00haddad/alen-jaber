@@ -2,11 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { motion, useScroll, useTransform, type Variants } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import alenAsset from "@/assets/alen.jpeg.asset.json";
-import { ArrowUpLeft, Plus, Linkedin, Instagram, Mail, Menu, X } from "lucide-react";
+import { ArrowUpLeft, Plus, Linkedin, Instagram, Mail, Menu, X, Download, Briefcase, Sparkles } from "lucide-react";
 import {
   useSettings, useProjects, useStats, useProcessSteps,
   useTestimonials, useServices, useMarqueeWords, useNavLinks,
-  useLiveSiteContent,
+  useExperiences, useSkills, useLiveSiteContent,
 } from "@/lib/site-data";
 
 export const Route = createFileRoute("/")({
