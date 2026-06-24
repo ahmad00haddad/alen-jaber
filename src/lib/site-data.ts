@@ -54,6 +54,8 @@ export const useProcessSteps = () => listQuery<ProcessStep>("process_steps", "pr
 export const useServices = () => listQuery<Service>("services", "services");
 export const useMarqueeWords = () => listQuery<MarqueeWord>("marquee_words", "marquee_words");
 export const useNavLinks = () => listQuery<NavLink>("nav_links", "nav_links");
+export const useExperiences = () => listQuery<Experience>("experiences", "experiences");
+export const useSkills = () => listQuery<Skill>("skills", "skills");
 
 
 
@@ -73,6 +75,8 @@ export function useLiveSiteContent() {
       services: "services",
       marquee_words: "marquee_words",
       nav_links: "nav_links",
+      experiences: "experiences",
+      skills: "skills",
     };
     const channel = supabase
       .channel("site-live")
