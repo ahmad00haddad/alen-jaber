@@ -58,11 +58,13 @@ function Index() {
       <Stats />
       <About about={settings?.about ?? {}} />
       <Works intro={settings?.works_intro ?? {}} />
+      <Experience intro={settings?.experience_intro ?? {}} cv={settings?.cv ?? {}} />
+      <SkillsSection intro={settings?.skills_intro ?? {}} />
       <Process intro={settings?.process_intro ?? {}} />
       <Voices intro={settings?.voices_intro ?? {}} />
-      <Contact contact={settings?.contact ?? {}} />
+      <Contact contact={settings?.contact ?? {}} cv={settings?.cv ?? {}} />
       <BigMark big={settings?.big_mark ?? {}} />
-      <Footer footer={settings?.footer ?? {}} social={settings?.social ?? {}} navItems={navItems} />
+      <Footer footer={settings?.footer ?? {}} social={settings?.social ?? {}} navItems={navItems} cv={settings?.cv ?? {}} />
     </div>
   );
 }
