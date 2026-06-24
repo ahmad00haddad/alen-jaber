@@ -2,11 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { motion, useScroll, useTransform, type Variants } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import alenAsset from "@/assets/alen.jpeg.asset.json";
-import { ArrowUpLeft, Plus, Linkedin, Instagram, Mail, Menu, X } from "lucide-react";
+import { ArrowUpLeft, Plus, Linkedin, Instagram, Mail, Menu, X, Download, Briefcase, Sparkles } from "lucide-react";
 import {
   useSettings, useProjects, useStats, useProcessSteps,
   useTestimonials, useServices, useMarqueeWords, useNavLinks,
-  useLiveSiteContent,
+  useExperiences, useSkills, useLiveSiteContent,
 } from "@/lib/site-data";
 
 export const Route = createFileRoute("/")({
@@ -58,11 +58,13 @@ function Index() {
       <Stats />
       <About about={settings?.about ?? {}} />
       <Works intro={settings?.works_intro ?? {}} />
+      <Experience intro={settings?.experience_intro ?? {}} cv={settings?.cv ?? {}} />
+      <SkillsSection intro={settings?.skills_intro ?? {}} />
       <Process intro={settings?.process_intro ?? {}} />
       <Voices intro={settings?.voices_intro ?? {}} />
-      <Contact contact={settings?.contact ?? {}} />
+      <Contact contact={settings?.contact ?? {}} cv={settings?.cv ?? {}} />
       <BigMark big={settings?.big_mark ?? {}} />
-      <Footer footer={settings?.footer ?? {}} social={settings?.social ?? {}} navItems={navItems} />
+      <Footer footer={settings?.footer ?? {}} social={settings?.social ?? {}} navItems={navItems} cv={settings?.cv ?? {}} />
     </div>
   );
 }
@@ -213,6 +215,10 @@ function Hero({ hero, meta }: { hero: any; meta: any }) {
               <a href="#contact"
                 className="inline-flex items-center gap-3 border border-brass/60 text-brass px-6 py-3 font-display text-sm md:text-base hover:bg-brass/10 transition-colors">
                 <Mail className="w-4 h-4" /> {ctaS}
+              </a>
+              <a href="/__l5e/assets-v1/f95193d3-bf76-4de6-a6d2-fd1a9e065004/Alen_Jaber_CV.docx" download
+                className="group inline-flex items-center gap-3 border border-brass/40 text-foreground/85 px-6 py-3 font-display text-sm md:text-base hover:text-brass hover:border-brass transition-colors">
+                <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" /> حمّل السيرة
               </a>
             </motion.div>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 1.2 }}
@@ -463,11 +469,117 @@ function Voices({ intro }: { intro: any }) {
   );
 }
 
+// ============== EXPERIENCE ==============
+function Experience({ intro, cv }: { intro: any; cv: any }) {
+  const { data } = useExperiences();
+  const items = data ?? [];
+  if (!items.length) return null;
+  const label = intro.label ?? "— الخبرة / 05";
+  const headline = intro.headline ?? "محطّاتٌ مهنيّة.";
+  const cvUrl = cv?.url;
+  const cvLabel = cv?.label ?? "حمّل السيرة الذاتية";
+  return (
+    <section id="experience" className="px-5 md:px-10 lg:px-14 py-20 md:py-32 max-w-[1500px] mx-auto">
+      <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }} variants={stagger}
+        className="grid grid-cols-12 gap-6 md:gap-10 items-start mb-12 md:mb-16">
+        <motion.div variants={fadeUp} className="col-span-12 md:col-span-3">
+          <p className="text-xs latin text-brass mb-4">{label}</p>
+          <div className="w-12 h-px bg-brass" />
+        </motion.div>
+        <motion.div variants={fadeUp} className="col-span-12 md:col-span-9 flex flex-wrap items-end justify-between gap-6">
+          <h2 className="font-display text-3xl md:text-5xl lg:text-6xl brass-gradient">{headline}</h2>
+          {cvUrl && (
+            <a href={cvUrl} download
+              className="group inline-flex items-center gap-3 border border-brass/50 text-brass px-5 py-2.5 text-sm latin hover:bg-brass hover:text-brass-foreground transition-all duration-300">
+              <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
+              {cvLabel}
+            </a>
+          )}
+        </motion.div>
+      </motion.div>
+      <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-50px" }} variants={stagger}
+        className="space-y-px bg-border/60">
+        {items.map((e) => (
+          <motion.div key={e.id} variants={fadeUp}
+            className="bg-background p-6 md:p-10 group hover:bg-secondary/30 transition-colors duration-500">
+            <div className="grid grid-cols-12 gap-4 md:gap-8">
+              <div className="col-span-12 md:col-span-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <Briefcase className="w-4 h-4 text-brass" />
+                  <span className="text-[10px] latin text-muted-foreground">{e.location}</span>
+                </div>
+                <h3 className="font-display text-2xl md:text-3xl text-brass mb-1.5">{e.company}</h3>
+                <p className="text-sm md:text-base text-foreground/85">{e.role}</p>
+                <p className="text-[11px] latin text-muted-foreground mt-2">{e.period}</p>
+              </div>
+              <ul className="col-span-12 md:col-span-8 space-y-3 md:pr-6 md:border-r md:border-border md:pt-0 pt-4 border-t md:border-t-0 border-border">
+                {(e.bullets || []).map((b, i) => (
+                  <li key={i} className="flex gap-3 text-sm md:text-base text-muted-foreground leading-[1.85]">
+                    <span className="text-brass mt-2 shrink-0">—</span>
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+        ))}
+      </motion.div>
+    </section>
+  );
+}
+
+// ============== SKILLS ==============
+function SkillsSection({ intro }: { intro: any }) {
+  const { data } = useSkills();
+  const groups = data ?? [];
+  if (!groups.length) return null;
+  const label = intro.label ?? "— القدرات / 06";
+  const headline = intro.headline ?? "أدواتٌ ومهارات.";
+  return (
+    <section id="skills" className="px-5 md:px-10 lg:px-14 py-20 md:py-32 border-t border-border bg-secondary/10">
+      <div className="max-w-[1500px] mx-auto">
+        <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }} variants={stagger}
+          className="grid grid-cols-12 gap-6 md:gap-10 items-start mb-12 md:mb-16">
+          <motion.div variants={fadeUp} className="col-span-12 md:col-span-3">
+            <p className="text-xs latin text-brass mb-4">{label}</p>
+            <div className="w-12 h-px bg-brass" />
+          </motion.div>
+          <motion.h2 variants={fadeUp} className="col-span-12 md:col-span-9 font-display text-3xl md:text-5xl lg:text-6xl">
+            {headline}
+          </motion.h2>
+        </motion.div>
+        <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-50px" }} variants={stagger}
+          className="grid grid-cols-1 md:grid-cols-3 gap-px bg-border/60">
+          {groups.map((g) => (
+            <motion.div key={g.id} variants={fadeUp}
+              className="bg-background p-7 md:p-9 group hover:bg-card transition-colors duration-500">
+              <div className="flex items-center gap-2 mb-6">
+                <Sparkles className="w-4 h-4 text-brass" />
+                <span className="text-[10px] latin text-muted-foreground uppercase tracking-[0.25em]">{g.category}</span>
+              </div>
+              <ul className="space-y-3">
+                {(g.items || []).map((it, i) => (
+                  <li key={i} className="flex items-center gap-3 text-base md:text-lg font-display group/item">
+                    <span className="w-1.5 h-1.5 rounded-full bg-brass/70 group-hover/item:scale-150 transition-transform" />
+                    <span className="latin">{it}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
 // ============== CONTACT ==============
-function Contact({ contact }: { contact: any }) {
+function Contact({ contact, cv }: { contact: any; cv: any }) {
   const label = contact.label ?? "— هيّا نصنع شيئاً عظيماً";
   const headline = contact.headline ?? "لنبدأ\nالمشروع";
   const email = contact.email ?? "hello@alenjaber.com";
+  const phone = contact.phone;
+  const cvUrl = cv?.url;
   return (
     <section id="contact" className="relative px-5 md:px-10 lg:px-14 py-24 md:py-40 text-center grain overflow-hidden border-t border-border">
       <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-80px" }} variants={stagger}>
@@ -481,6 +593,21 @@ function Contact({ contact }: { contact: any }) {
           <Mail className="w-5 h-5 md:w-7 md:h-7" />
           {email}
         </motion.a>
+        <motion.div variants={fadeUp} className="mt-10 md:mt-12 flex flex-wrap items-center justify-center gap-4 md:gap-6">
+          {phone && (
+            <a href={`tel:${phone.replace(/\s+/g, "")}`}
+              className="inline-flex items-center gap-2 text-xs md:text-sm latin text-muted-foreground hover:text-brass transition-colors border border-border px-4 py-2.5">
+              {phone}
+            </a>
+          )}
+          {cvUrl && (
+            <a href={cvUrl} download
+              className="group inline-flex items-center gap-2 text-xs md:text-sm latin brass-bg text-brass-foreground px-5 py-2.5 hover:gap-3 transition-all duration-300">
+              <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
+              {cv?.label ?? "Download CV"}
+            </a>
+          )}
+        </motion.div>
       </motion.div>
     </section>
   );
@@ -505,8 +632,8 @@ function BigMark({ big }: { big: any }) {
 }
 
 // ============== FOOTER ==============
-function Footer({ footer, social, navItems }:
-  { footer: any; social: any; navItems: { href: string; label: string }[] }) {
+function Footer({ footer, social, navItems, cv }:
+  { footer: any; social: any; navItems: { href: string; label: string }[]; cv: any }) {
   const services = useServices().data ?? [];
   return (
     <footer className="px-5 md:px-10 lg:px-14 py-14 md:py-16 border-t border-border">
@@ -514,6 +641,12 @@ function Footer({ footer, social, navItems }:
         <div>
           <p className="font-display text-brass text-2xl mb-3">{footer.name ?? "ألِن جابر"}</p>
           <p className="text-sm text-muted-foreground leading-[1.85]">{footer.description ?? ""}</p>
+          {cv?.url && (
+            <a href={cv.url} download
+              className="mt-5 inline-flex items-center gap-2 text-xs latin text-brass border border-brass/40 px-3 py-2 hover:bg-brass hover:text-brass-foreground transition-colors">
+              <Download className="w-3.5 h-3.5" /> {cv.label ?? "Download CV"}
+            </a>
+          )}
         </div>
         <FooterCol title={footer.links_title ?? "روابط"} items={navItems.map((l) => l.label)} hrefs={navItems.map((l) => l.href)} />
         <FooterCol title={footer.services_title ?? "الخدمات"} items={services.length ? services.map((s) => s.name) : []} />
