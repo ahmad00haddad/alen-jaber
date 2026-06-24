@@ -216,6 +216,10 @@ function Hero({ hero, meta }: { hero: any; meta: any }) {
                 className="inline-flex items-center gap-3 border border-brass/60 text-brass px-6 py-3 font-display text-sm md:text-base hover:bg-brass/10 transition-colors">
                 <Mail className="w-4 h-4" /> {ctaS}
               </a>
+              <a href="/__l5e/assets-v1/f95193d3-bf76-4de6-a6d2-fd1a9e065004/Alen_Jaber_CV.docx" download
+                className="group inline-flex items-center gap-3 border border-brass/40 text-foreground/85 px-6 py-3 font-display text-sm md:text-base hover:text-brass hover:border-brass transition-colors">
+                <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" /> حمّل السيرة
+              </a>
             </motion.div>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 1.2 }}
               className="mt-12 md:mt-14 flex items-center gap-6 md:gap-10 justify-center md:justify-start text-xs latin text-muted-foreground border-t border-border pt-6">
