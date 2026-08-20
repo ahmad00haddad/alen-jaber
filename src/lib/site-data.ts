@@ -27,7 +27,9 @@ export const SETTING_KEYS = [
   "hero","hero_meta","manifesto","about","works_intro",
   "process_intro","voices_intro","experience_intro","skills_intro",
   "contact","big_mark","footer","social","meta","nav_cta","cv",
+  "showreel","inquiry",
 ] as const;
+
 export type SettingKey = typeof SETTING_KEYS[number];
 
 export type SettingsMap = Record<string, Record<string, any>>;
