@@ -5,7 +5,15 @@ import { useEffect } from "react";
 export type Project = {
   id: string; num: string; title: string; tag: string; year: string;
   featured: boolean; link: string | null; sort_order: number;
+  slug: string | null; category: string; summary: string; body: string;
+  cover_url: string | null; video_url: string | null;
+  client: string; role: string; crew: string[]; gallery: string[];
 };
+export type Inquiry = {
+  id: string; name: string; email: string; phone: string; project_type: string;
+  budget: string; timeline: string; message: string; status: string; created_at: string;
+};
+
 export type Testimonial = { id: string; quote: string; name: string; role: string; sort_order: number };
 export type Stat = { id: string; number: string; label: string; is_latin: boolean; sort_order: number };
 export type ProcessStep = { id: string; num: string; title: string; description: string; sort_order: number };
@@ -19,7 +27,9 @@ export const SETTING_KEYS = [
   "hero","hero_meta","manifesto","about","works_intro",
   "process_intro","voices_intro","experience_intro","skills_intro",
   "contact","big_mark","footer","social","meta","nav_cta","cv",
+  "showreel","inquiry",
 ] as const;
+
 export type SettingKey = typeof SETTING_KEYS[number];
 
 export type SettingsMap = Record<string, Record<string, any>>;

@@ -125,41 +125,110 @@ export type Database = {
         }
         Relationships: []
       }
+      project_inquiries: {
+        Row: {
+          budget: string
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          phone: string
+          project_type: string
+          status: string
+          timeline: string
+        }
+        Insert: {
+          budget?: string
+          created_at?: string
+          email: string
+          id?: string
+          message?: string
+          name: string
+          phone?: string
+          project_type?: string
+          status?: string
+          timeline?: string
+        }
+        Update: {
+          budget?: string
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          phone?: string
+          project_type?: string
+          status?: string
+          timeline?: string
+        }
+        Relationships: []
+      }
       projects: {
         Row: {
+          body: string
+          category: string
+          client: string
+          cover_url: string | null
           created_at: string
+          crew: Json
           featured: boolean
+          gallery: Json
           id: string
           link: string | null
           num: string
+          role: string
+          slug: string | null
           sort_order: number
+          summary: string
           tag: string
           title: string
           updated_at: string
+          video_url: string | null
           year: string
         }
         Insert: {
+          body?: string
+          category?: string
+          client?: string
+          cover_url?: string | null
           created_at?: string
+          crew?: Json
           featured?: boolean
+          gallery?: Json
           id?: string
           link?: string | null
           num?: string
+          role?: string
+          slug?: string | null
           sort_order?: number
+          summary?: string
           tag?: string
           title: string
           updated_at?: string
+          video_url?: string | null
           year?: string
         }
         Update: {
+          body?: string
+          category?: string
+          client?: string
+          cover_url?: string | null
           created_at?: string
+          crew?: Json
           featured?: boolean
+          gallery?: Json
           id?: string
           link?: string | null
           num?: string
+          role?: string
+          slug?: string | null
           sort_order?: number
+          summary?: string
           tag?: string
           title?: string
           updated_at?: string
+          video_url?: string | null
           year?: string
         }
         Relationships: []
