@@ -1,8 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useScroll, useTransform, type Variants } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import alenAsset from "@/assets/alen.jpeg.asset.json";
-import { ArrowUpLeft, Plus, Linkedin, Instagram, Mail, Menu, X, Download, Briefcase, Sparkles } from "lucide-react";
+import { ArrowUpLeft, Plus, Linkedin, Instagram, Mail, Menu, X, Download, Briefcase, Sparkles, Play } from "lucide-react";
+import { ShowreelModal } from "@/components/site/ShowreelModal";
+import { InquiryForm } from "@/components/site/InquiryForm";
 import {
   useSettings, useProjects, useStats, useProcessSteps,
   useTestimonials, useServices, useMarqueeWords, useNavLinks,
