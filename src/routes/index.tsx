@@ -217,6 +217,12 @@ function Hero({ hero, meta, showreel }: { hero: any; meta: any; showreel: any })
                 {ctaP}
                 <ArrowUpLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
               </a>
+              {reelUrl && (
+                <button onClick={() => setReelOpen(true)}
+                  className="group inline-flex items-center gap-3 border border-brass/60 text-brass px-6 py-3 font-display text-sm md:text-base hover:bg-brass hover:text-brass-foreground transition-all duration-300">
+                  <Play className="w-4 h-4" /> {showreel?.label ?? "شاهد الشوريل"}
+                </button>
+              )}
               <a href="#contact"
                 className="inline-flex items-center gap-3 border border-brass/60 text-brass px-6 py-3 font-display text-sm md:text-base hover:bg-brass/10 transition-colors">
                 <Mail className="w-4 h-4" /> {ctaS}
