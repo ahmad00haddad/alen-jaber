@@ -428,12 +428,24 @@ function RowEditor({ row, cols, onUpdate, onDelete }:
   const [saving, setSaving] = useState(false);
   useEffect(() => { setLocal(row); }, [row.id]);
 
-  const dirty = useMemo(() => cols.some((c) => local[c.k] !== row[c.k]) || local.sort_order !== row.sort_order, [local, row, cols]);
+  const asText = (c: Col, v: any) =>
+    c.type === "list" ? (Array.isArray(v) ? v.join("\n") : (v ?? "")) : (v ?? "");
+
+  const dirty = useMemo(
+    () => cols.some((c) => asText(c, local[c.k]) !== asText(c, row[c.k])) || local.sort_order !== row.sort_order,
+    [local, row, cols],
+  );
 
   const save = async () => {
     setSaving(true);
     const patch: any = { sort_order: Number(local.sort_order) || 0 };
-    cols.forEach((c) => { patch[c.k] = c.type === "number" ? Number(local[c.k]) || 0 : local[c.k]; });
+    cols.forEach((c) => {
+      const v = local[c.k];
+      patch[c.k] =
+        c.type === "number" ? Number(v) || 0
+        : c.type === "list" ? (Array.isArray(v) ? v : String(v ?? "").split("\n").map((s) => s.trim()).filter(Boolean))
+        : v;
+    });
     await onUpdate(patch);
     setSaving(false);
     toast.success("تم الحفظ");
@@ -447,6 +459,10 @@ function RowEditor({ row, cols, onUpdate, onDelete }:
             <Label className="text-[10px] text-muted-foreground">{c.l}</Label>
             {c.type === "textarea" ? (
               <Textarea rows={2} value={local[c.k] ?? ""} onChange={(e) => setLocal({ ...local, [c.k]: e.target.value })} />
+            ) : c.type === "list" ? (
+              <Textarea rows={3} dir="auto" placeholder="عنصر في كل سطر"
+                value={asText(c, local[c.k])}
+                onChange={(e) => setLocal({ ...local, [c.k]: e.target.value.split("\n") })} />
             ) : c.type === "bool" ? (
               <div className="flex items-center h-9"><Switch checked={!!local[c.k]} onCheckedChange={(v) => setLocal({ ...local, [c.k]: v })} /></div>
             ) : (
