@@ -235,6 +235,17 @@ const CONTENT_SECTIONS: { key: string; title: string; fields: FieldDef[] }[] = [
     { k: "title", l: "عنوان الصفحة" },
     { k: "description", l: "الوصف", type: "textarea" },
   ]},
+  { key: "showreel", title: "الشوريل (فيديو التعريف)", fields: [
+    { k: "label", l: "نص الزر" },
+    { k: "title", l: "عنوان الفيديو" },
+    { k: "url", l: "رابط الفيديو (YouTube / Vimeo / MP4)", type: "url" },
+  ]},
+  { key: "inquiry", title: "قسم طلب المشروع", fields: [
+    { k: "label", l: "اللصيقة" },
+    { k: "headline", l: "العنوان" },
+    { k: "note", l: "ملاحظة تحت العنوان", type: "textarea" },
+    { k: "success", l: "رسالة النجاح", type: "textarea" },
+  ]},
 ];
 
 function ContentEditor() {
