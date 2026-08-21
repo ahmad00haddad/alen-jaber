@@ -43,6 +43,7 @@ function AdminPage() {
     { v: "content", l: "نصوص الموقع", icon: Settings },
     { v: "media", l: "الوسائط", icon: ImageIcon },
     { v: "projects", l: "الأعمال", icon: Briefcase },
+    { v: "inquiries", l: "طلبات المشاريع", icon: Inbox },
     { v: "process", l: "مراحل العمل", icon: ListChecks },
     { v: "stats", l: "الأرقام", icon: BarChart3 },
     { v: "testimonials", l: "الشهادات", icon: Quote },
