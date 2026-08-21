@@ -1,8 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useScroll, useTransform, type Variants } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import alenAsset from "@/assets/alen.jpeg.asset.json";
-import { ArrowUpLeft, Plus, Linkedin, Instagram, Mail, Menu, X, Download, Briefcase, Sparkles } from "lucide-react";
+import { ArrowUpLeft, Plus, Linkedin, Instagram, Mail, Menu, X, Download, Briefcase, Sparkles, Play } from "lucide-react";
+import { ShowreelModal } from "@/components/site/ShowreelModal";
+import { InquiryForm } from "@/components/site/InquiryForm";
 import {
   useSettings, useProjects, useStats, useProcessSteps,
   useTestimonials, useServices, useMarqueeWords, useNavLinks,
@@ -52,7 +54,7 @@ function Index() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Nav navItems={navItems} cta={settings?.nav_cta ?? {}} />
-      <Hero hero={settings?.hero ?? {}} meta={settings?.hero_meta ?? {}} />
+      <Hero hero={settings?.hero ?? {}} meta={settings?.hero_meta ?? {}} showreel={settings?.showreel ?? {}} />
       <Marquee />
       <Manifesto manifesto={settings?.manifesto ?? {}} />
       <Stats />
@@ -62,6 +64,7 @@ function Index() {
       <SkillsSection intro={settings?.skills_intro ?? {}} />
       <Process intro={settings?.process_intro ?? {}} />
       <Voices intro={settings?.voices_intro ?? {}} />
+      <InquiryForm intro={settings?.inquiry ?? {}} />
       <Contact contact={settings?.contact ?? {}} cv={settings?.cv ?? {}} />
       <BigMark big={settings?.big_mark ?? {}} />
       <Footer footer={settings?.footer ?? {}} social={settings?.social ?? {}} navItems={navItems} cv={settings?.cv ?? {}} />
@@ -160,11 +163,12 @@ function Nav({ navItems, cta }: { navItems: { href: string; label: string }[]; c
 }
 
 // ============== HERO ==============
-function Hero({ hero, meta }: { hero: any; meta: any }) {
+function Hero({ hero, meta, showreel }: { hero: any; meta: any; showreel: any }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
   const opacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
+  const [reelOpen, setReelOpen] = useState(false);
 
   const name = hero.name ?? "ألن جابر";
   const tagline = hero.tagline ?? "مخرج · منتج محتوى · صانع صورة";
@@ -173,6 +177,7 @@ function Hero({ hero, meta }: { hero: any; meta: any }) {
   const ctaS = hero.cta_secondary ?? "للتعاون";
   const badge = hero.badge ?? "ALEN · ON SET";
   const image = hero.image_url || alenAsset.url;
+  const reelUrl = showreel?.url as string | undefined;
 
   return (
     <section ref={ref} id="top" className="relative pt-32 md:pt-36 pb-16 md:pb-24 px-5 md:px-10 lg:px-14 grain min-h-screen flex items-center">
@@ -212,6 +217,12 @@ function Hero({ hero, meta }: { hero: any; meta: any }) {
                 {ctaP}
                 <ArrowUpLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
               </a>
+              {reelUrl && (
+                <button onClick={() => setReelOpen(true)}
+                  className="group inline-flex items-center gap-3 border border-brass/60 text-brass px-6 py-3 font-display text-sm md:text-base hover:bg-brass hover:text-brass-foreground transition-all duration-300">
+                  <Play className="w-4 h-4" /> {showreel?.label ?? "شاهد الشوريل"}
+                </button>
+              )}
               <a href="#contact"
                 className="inline-flex items-center gap-3 border border-brass/60 text-brass px-6 py-3 font-display text-sm md:text-base hover:bg-brass/10 transition-colors">
                 <Mail className="w-4 h-4" /> {ctaS}
@@ -259,6 +270,9 @@ function Hero({ hero, meta }: { hero: any; meta: any }) {
           <span className="w-px h-10 bg-gradient-to-b from-brass to-transparent" />
         </motion.div>
       </motion.div>
+      {reelUrl && (
+        <ShowreelModal url={reelUrl} title={showreel?.title} open={reelOpen} onClose={() => setReelOpen(false)} />
+      )}
     </section>
   );
 }
@@ -352,11 +366,16 @@ function Works({ intro }: { intro: any }) {
   const label = intro.label ?? "— الأعمال / 02";
   const headline = intro.headline ?? "أعمالٌ مختارة";
   const yearRange = intro.year_range ?? "2023 — 2026";
+
+  const categories = Array.from(new Set(projects.map((p) => p.category).filter(Boolean)));
+  const [active, setActive] = useState<string>("الكل");
+  const shown = active === "الكل" ? projects : projects.filter((p) => p.category === active);
+
   return (
     <section id="works" className="px-5 md:px-10 lg:px-14 py-20 md:py-32 border-t border-border">
       <div className="max-w-[1500px] mx-auto">
         <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-80px" }} variants={stagger}
-          className="flex items-end justify-between mb-10 md:mb-14 gap-6">
+          className="flex items-end justify-between mb-8 md:mb-10 gap-6">
           <div>
             <motion.p variants={fadeUp} className="text-xs latin text-brass mb-4">{label}</motion.p>
             <motion.h2 variants={fadeUp} className="font-display text-4xl md:text-6xl lg:text-7xl brass-gradient">
@@ -367,35 +386,74 @@ function Works({ intro }: { intro: any }) {
             {yearRange}
           </motion.span>
         </motion.div>
-        <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-50px" }} variants={stagger}
+
+        {categories.length > 1 && (
+          <div className="flex flex-wrap gap-2 mb-8">
+            {["الكل", ...categories].map((c) => (
+              <button key={c} onClick={() => setActive(c)}
+                className={`px-4 py-2 text-xs md:text-sm border transition-all duration-300 ${
+                  active === c
+                    ? "border-brass bg-brass text-brass-foreground"
+                    : "border-border text-muted-foreground hover:border-brass/60 hover:text-brass"
+                }`}>
+                {c}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <motion.div key={active} initial="hidden" animate="show" variants={stagger}
           className="border-t border-border">
-          {projects.map((p) => (
-            <motion.a key={p.id} href={p.link || "#"} variants={fadeUp}
-              className={`group flex items-center gap-4 md:gap-6 px-3 md:px-6 py-5 md:py-7 border-b border-border transition-all duration-500 relative overflow-hidden ${
-                p.featured ? "brass-bg text-brass-foreground" : "hover:bg-secondary/40"
-              }`}>
-              <span className={`text-xs latin tabular-nums w-8 md:w-12 shrink-0 ${p.featured ? "" : "text-brass"}`}>
-                {p.num}
-              </span>
-              <div className="flex-1 min-w-0">
-                <h3 className="font-display text-xl md:text-3xl lg:text-4xl group-hover:-translate-x-2 transition-transform duration-500 truncate">
-                  {p.title}
-                </h3>
-              </div>
-              <span className={`hidden md:inline text-sm shrink-0 ${p.featured ? "opacity-80" : "text-muted-foreground"}`}>
-                {p.tag}
-              </span>
-              <span className={`text-xs latin tabular-nums w-12 md:w-16 text-left shrink-0 ${p.featured ? "opacity-80" : "text-muted-foreground"}`}>
-                {p.year}
-              </span>
-              <ArrowUpLeft className="w-5 h-5 md:w-6 md:h-6 group-hover:rotate-45 transition-transform duration-500 shrink-0" />
-            </motion.a>
-          ))}
+          {shown.map((p) => {
+            const inner = (
+              <>
+                <span className={`text-xs latin tabular-nums w-8 md:w-12 shrink-0 ${p.featured ? "" : "text-brass"}`}>
+                  {p.num}
+                </span>
+                {p.cover_url && (
+                  <span className="hidden md:block w-20 h-14 shrink-0 overflow-hidden border border-border/60">
+                    <img src={p.cover_url} alt={p.title} loading="lazy"
+                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
+                  </span>
+                )}
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-display text-xl md:text-3xl lg:text-4xl group-hover:-translate-x-2 transition-transform duration-500 truncate">
+                    {p.title}
+                  </h3>
+                  {p.summary && (
+                    <p className={`hidden md:block text-xs mt-1 truncate ${p.featured ? "opacity-75" : "text-muted-foreground"}`}>
+                      {p.summary}
+                    </p>
+                  )}
+                </div>
+                <span className={`hidden md:inline text-sm shrink-0 ${p.featured ? "opacity-80" : "text-muted-foreground"}`}>
+                  {p.tag || p.category}
+                </span>
+                <span className={`text-xs latin tabular-nums w-12 md:w-16 text-left shrink-0 ${p.featured ? "opacity-80" : "text-muted-foreground"}`}>
+                  {p.year}
+                </span>
+                <ArrowUpLeft className="w-5 h-5 md:w-6 md:h-6 group-hover:rotate-45 transition-transform duration-500 shrink-0" />
+              </>
+            );
+            const cls = `group flex items-center gap-4 md:gap-6 px-3 md:px-6 py-5 md:py-7 border-b border-border transition-all duration-500 relative overflow-hidden ${
+              p.featured ? "brass-bg text-brass-foreground" : "hover:bg-secondary/40"
+            }`;
+            return (
+              <motion.div key={p.id} variants={fadeUp}>
+                {p.slug ? (
+                  <Link to="/work/$slug" params={{ slug: p.slug }} className={cls}>{inner}</Link>
+                ) : (
+                  <a href={p.link || "#"} className={cls}>{inner}</a>
+                )}
+              </motion.div>
+            );
+          })}
         </motion.div>
       </div>
     </section>
   );
 }
+
 
 // ============== PROCESS ==============
 function Process({ intro }: { intro: any }) {

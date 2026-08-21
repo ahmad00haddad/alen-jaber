@@ -15,7 +15,7 @@ import {
 } from "@/lib/site-data";
 import {
   LogOut, Save, Plus, Trash2, Upload, ExternalLink, Image as ImageIcon,
-  Settings, Briefcase, Quote, BarChart3, ListChecks, Wrench, Type, Link as LinkIcon, Home,
+  Settings, Briefcase, Quote, BarChart3, ListChecks, Wrench, Type, Link as LinkIcon, Home, Inbox,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -43,6 +43,7 @@ function AdminPage() {
     { v: "content", l: "نصوص الموقع", icon: Settings },
     { v: "media", l: "الوسائط", icon: ImageIcon },
     { v: "projects", l: "الأعمال", icon: Briefcase },
+    { v: "inquiries", l: "طلبات المشاريع", icon: Inbox },
     { v: "process", l: "مراحل العمل", icon: ListChecks },
     { v: "stats", l: "الأرقام", icon: BarChart3 },
     { v: "testimonials", l: "الشهادات", icon: Quote },
@@ -90,6 +91,7 @@ function AdminPage() {
           <TabsContent value="content"><ContentEditor /></TabsContent>
           <TabsContent value="media"><MediaPanel /></TabsContent>
           <TabsContent value="projects"><ProjectsAdmin /></TabsContent>
+          <TabsContent value="inquiries"><InquiriesAdmin /></TabsContent>
           <TabsContent value="process"><ProcessAdmin /></TabsContent>
           <TabsContent value="stats"><StatsAdmin /></TabsContent>
           <TabsContent value="testimonials"><TestimonialsAdmin /></TabsContent>
@@ -233,6 +235,17 @@ const CONTENT_SECTIONS: { key: string; title: string; fields: FieldDef[] }[] = [
     { k: "title", l: "عنوان الصفحة" },
     { k: "description", l: "الوصف", type: "textarea" },
   ]},
+  { key: "showreel", title: "الشوريل (فيديو التعريف)", fields: [
+    { k: "label", l: "نص الزر" },
+    { k: "title", l: "عنوان الفيديو" },
+    { k: "url", l: "رابط الفيديو (YouTube / Vimeo / MP4)", type: "url" },
+  ]},
+  { key: "inquiry", title: "قسم طلب المشروع", fields: [
+    { k: "label", l: "اللصيقة" },
+    { k: "headline", l: "العنوان" },
+    { k: "note", l: "ملاحظة تحت العنوان", type: "textarea" },
+    { k: "success", l: "رسالة النجاح", type: "textarea" },
+  ]},
 ];
 
 function ContentEditor() {
@@ -357,7 +370,7 @@ function MediaPanel() {
 }
 
 // ============ CRUD HELPERS ============
-type Col = { k: string; l: string; type?: "text" | "textarea" | "number" | "bool"; w?: string };
+type Col = { k: string; l: string; type?: "text" | "textarea" | "number" | "bool" | "list"; w?: string };
 
 function CrudTable({ title, table, queryKey, cols, defaults }:
   { title: string; table: string; queryKey: string; cols: Col[]; defaults: Record<string, any> }) {
@@ -415,12 +428,24 @@ function RowEditor({ row, cols, onUpdate, onDelete }:
   const [saving, setSaving] = useState(false);
   useEffect(() => { setLocal(row); }, [row.id]);
 
-  const dirty = useMemo(() => cols.some((c) => local[c.k] !== row[c.k]) || local.sort_order !== row.sort_order, [local, row, cols]);
+  const asText = (c: Col, v: any) =>
+    c.type === "list" ? (Array.isArray(v) ? v.join("\n") : (v ?? "")) : (v ?? "");
+
+  const dirty = useMemo(
+    () => cols.some((c) => asText(c, local[c.k]) !== asText(c, row[c.k])) || local.sort_order !== row.sort_order,
+    [local, row, cols],
+  );
 
   const save = async () => {
     setSaving(true);
     const patch: any = { sort_order: Number(local.sort_order) || 0 };
-    cols.forEach((c) => { patch[c.k] = c.type === "number" ? Number(local[c.k]) || 0 : local[c.k]; });
+    cols.forEach((c) => {
+      const v = local[c.k];
+      patch[c.k] =
+        c.type === "number" ? Number(v) || 0
+        : c.type === "list" ? (Array.isArray(v) ? v : String(v ?? "").split("\n").map((s) => s.trim()).filter(Boolean))
+        : v;
+    });
     await onUpdate(patch);
     setSaving(false);
     toast.success("تم الحفظ");
@@ -434,6 +459,10 @@ function RowEditor({ row, cols, onUpdate, onDelete }:
             <Label className="text-[10px] text-muted-foreground">{c.l}</Label>
             {c.type === "textarea" ? (
               <Textarea rows={2} value={local[c.k] ?? ""} onChange={(e) => setLocal({ ...local, [c.k]: e.target.value })} />
+            ) : c.type === "list" ? (
+              <Textarea rows={3} dir="auto" placeholder="عنصر في كل سطر"
+                value={asText(c, local[c.k])}
+                onChange={(e) => setLocal({ ...local, [c.k]: e.target.value.split("\n") })} />
             ) : c.type === "bool" ? (
               <div className="flex items-center h-9"><Switch checked={!!local[c.k]} onCheckedChange={(v) => setLocal({ ...local, [c.k]: v })} /></div>
             ) : (
@@ -462,15 +491,93 @@ function RowEditor({ row, cols, onUpdate, onDelete }:
 
 // ============ ADMIN PAGES ============
 const ProjectsAdmin = () => <CrudTable title="الأعمال" table="projects" queryKey="projects"
-  defaults={{ num: "", title: "مشروع جديد", tag: "", year: "", featured: false }}
+  defaults={{
+    num: "", title: "مشروع جديد", tag: "", year: "", featured: false,
+    slug: "project-" + Math.random().toString(36).slice(2, 8),
+    category: "إعلانات", summary: "", body: "", client: "", role: "", crew: [], gallery: [],
+  }}
   cols={[
     { k: "num", l: "رقم", w: "md:col-span-1" },
     { k: "title", l: "العنوان", w: "md:col-span-3" },
-    { k: "tag", l: "التصنيف", w: "md:col-span-2" },
+    { k: "slug", l: "الرابط الدائم (إنجليزي)", w: "md:col-span-3" },
+    { k: "category", l: "التصنيف (للفلترة)", w: "md:col-span-2" },
+    { k: "tag", l: "وسم إضافي", w: "md:col-span-2" },
     { k: "year", l: "السنة", w: "md:col-span-1" },
+    { k: "client", l: "العميل", w: "md:col-span-2" },
+    { k: "role", l: "الدور", w: "md:col-span-2" },
     { k: "featured", l: "مميز", type: "bool", w: "md:col-span-1" },
-    { k: "link", l: "رابط (اختياري)", w: "md:col-span-1" },
+    { k: "cover_url", l: "رابط صورة الغلاف", w: "md:col-span-3" },
+    { k: "video_url", l: "رابط الفيديو", w: "md:col-span-3" },
+    { k: "summary", l: "وصف مختصر", type: "textarea", w: "md:col-span-6" },
+    { k: "body", l: "النص الكامل للمشروع", type: "textarea", w: "md:col-span-6" },
+    { k: "crew", l: "فريق العمل (سطر لكل عنصر)", type: "list", w: "md:col-span-4" },
+    { k: "gallery", l: "روابط صور المعرض (سطر لكل رابط)", type: "list", w: "md:col-span-5" },
+    { k: "link", l: "رابط خارجي (اختياري)", w: "md:col-span-3" },
   ]} />;
+
+function InquiriesAdmin() {
+  const [rows, setRows] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const load = async () => {
+    setLoading(true);
+    const { data, error } = await sb.from("project_inquiries").select("*").order("created_at", { ascending: false });
+    if (error) toast.error(error.message); else setRows(data ?? []);
+    setLoading(false);
+  };
+  useEffect(() => { load(); }, []);
+
+  const setStatus = async (id: string, status: string) => {
+    const { error } = await sb.from("project_inquiries").update({ status }).eq("id", id);
+    if (error) toast.error(error.message); else { toast.success("تم التحديث"); load(); }
+  };
+  const remove = async (id: string) => {
+    if (!confirm("حذف الطلب؟")) return;
+    const { error } = await sb.from("project_inquiries").delete().eq("id", id);
+    if (error) toast.error(error.message); else { toast.success("حُذف"); load(); }
+  };
+
+  const STATUSES: Record<string, string> = { new: "جديد", in_progress: "قيد المتابعة", done: "منتهٍ", archived: "مؤرشف" };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <h3 className="font-display text-2xl">طلبات المشاريع</h3>
+        <Button variant="outline" size="sm" onClick={load}>تحديث</Button>
+      </div>
+      {loading ? <p className="text-sm text-muted-foreground">جارٍ التحميل...</p> :
+       rows.length === 0 ? <p className="text-sm text-muted-foreground border border-dashed border-border p-8 text-center">لا توجد طلبات بعد.</p> :
+        <div className="space-y-3">
+          {rows.map((r) => (
+            <div key={r.id} className="border border-border bg-card/30 p-4 md:p-5">
+              <div className="flex items-start justify-between gap-4 flex-wrap mb-3">
+                <div>
+                  <p className="font-display text-lg">{r.name}</p>
+                  <p className="text-xs latin text-muted-foreground" dir="ltr">{r.email} {r.phone && `· ${r.phone}`}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <select value={r.status} onChange={(e) => setStatus(r.id, e.target.value)}
+                    className="bg-transparent border border-border px-3 py-1.5 text-xs">
+                    {Object.entries(STATUSES).map(([k, l]) => <option key={k} value={k} className="bg-background">{l}</option>)}
+                  </select>
+                  <Button size="sm" variant="outline" onClick={() => remove(r.id)}>
+                    <Trash2 className="w-3.5 h-3.5 text-destructive" />
+                  </Button>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs text-muted-foreground mb-3">
+                <span>النوع: <b className="text-foreground">{r.project_type || "—"}</b></span>
+                <span>الميزانية: <b className="text-foreground">{r.budget || "—"}</b></span>
+                <span>الموعد: <b className="text-foreground">{r.timeline || "—"}</b></span>
+                <span className="latin" dir="ltr">{new Date(r.created_at).toLocaleString()}</span>
+              </div>
+              {r.message && <p className="text-sm leading-[1.9] border-t border-border pt-3">{r.message}</p>}
+            </div>
+          ))}
+        </div>}
+    </div>
+  );
+}
 
 const ProcessAdmin = () => <CrudTable title="مراحل العمل" table="process_steps" queryKey="process_steps"
   defaults={{ num: "", title: "مرحلة", description: "" }}
