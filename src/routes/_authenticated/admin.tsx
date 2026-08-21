@@ -491,15 +491,93 @@ function RowEditor({ row, cols, onUpdate, onDelete }:
 
 // ============ ADMIN PAGES ============
 const ProjectsAdmin = () => <CrudTable title="الأعمال" table="projects" queryKey="projects"
-  defaults={{ num: "", title: "مشروع جديد", tag: "", year: "", featured: false }}
+  defaults={{
+    num: "", title: "مشروع جديد", tag: "", year: "", featured: false,
+    slug: "project-" + Math.random().toString(36).slice(2, 8),
+    category: "إعلانات", summary: "", body: "", client: "", role: "", crew: [], gallery: [],
+  }}
   cols={[
     { k: "num", l: "رقم", w: "md:col-span-1" },
     { k: "title", l: "العنوان", w: "md:col-span-3" },
-    { k: "tag", l: "التصنيف", w: "md:col-span-2" },
+    { k: "slug", l: "الرابط الدائم (إنجليزي)", w: "md:col-span-3" },
+    { k: "category", l: "التصنيف (للفلترة)", w: "md:col-span-2" },
+    { k: "tag", l: "وسم إضافي", w: "md:col-span-2" },
     { k: "year", l: "السنة", w: "md:col-span-1" },
+    { k: "client", l: "العميل", w: "md:col-span-2" },
+    { k: "role", l: "الدور", w: "md:col-span-2" },
     { k: "featured", l: "مميز", type: "bool", w: "md:col-span-1" },
-    { k: "link", l: "رابط (اختياري)", w: "md:col-span-1" },
+    { k: "cover_url", l: "رابط صورة الغلاف", w: "md:col-span-3" },
+    { k: "video_url", l: "رابط الفيديو", w: "md:col-span-3" },
+    { k: "summary", l: "وصف مختصر", type: "textarea", w: "md:col-span-6" },
+    { k: "body", l: "النص الكامل للمشروع", type: "textarea", w: "md:col-span-6" },
+    { k: "crew", l: "فريق العمل (سطر لكل عنصر)", type: "list", w: "md:col-span-4" },
+    { k: "gallery", l: "روابط صور المعرض (سطر لكل رابط)", type: "list", w: "md:col-span-5" },
+    { k: "link", l: "رابط خارجي (اختياري)", w: "md:col-span-3" },
   ]} />;
+
+function InquiriesAdmin() {
+  const [rows, setRows] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const load = async () => {
+    setLoading(true);
+    const { data, error } = await sb.from("project_inquiries").select("*").order("created_at", { ascending: false });
+    if (error) toast.error(error.message); else setRows(data ?? []);
+    setLoading(false);
+  };
+  useEffect(() => { load(); }, []);
+
+  const setStatus = async (id: string, status: string) => {
+    const { error } = await sb.from("project_inquiries").update({ status }).eq("id", id);
+    if (error) toast.error(error.message); else { toast.success("تم التحديث"); load(); }
+  };
+  const remove = async (id: string) => {
+    if (!confirm("حذف الطلب؟")) return;
+    const { error } = await sb.from("project_inquiries").delete().eq("id", id);
+    if (error) toast.error(error.message); else { toast.success("حُذف"); load(); }
+  };
+
+  const STATUSES: Record<string, string> = { new: "جديد", in_progress: "قيد المتابعة", done: "منتهٍ", archived: "مؤرشف" };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <h3 className="font-display text-2xl">طلبات المشاريع</h3>
+        <Button variant="outline" size="sm" onClick={load}>تحديث</Button>
+      </div>
+      {loading ? <p className="text-sm text-muted-foreground">جارٍ التحميل...</p> :
+       rows.length === 0 ? <p className="text-sm text-muted-foreground border border-dashed border-border p-8 text-center">لا توجد طلبات بعد.</p> :
+        <div className="space-y-3">
+          {rows.map((r) => (
+            <div key={r.id} className="border border-border bg-card/30 p-4 md:p-5">
+              <div className="flex items-start justify-between gap-4 flex-wrap mb-3">
+                <div>
+                  <p className="font-display text-lg">{r.name}</p>
+                  <p className="text-xs latin text-muted-foreground" dir="ltr">{r.email} {r.phone && `· ${r.phone}`}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <select value={r.status} onChange={(e) => setStatus(r.id, e.target.value)}
+                    className="bg-transparent border border-border px-3 py-1.5 text-xs">
+                    {Object.entries(STATUSES).map(([k, l]) => <option key={k} value={k} className="bg-background">{l}</option>)}
+                  </select>
+                  <Button size="sm" variant="outline" onClick={() => remove(r.id)}>
+                    <Trash2 className="w-3.5 h-3.5 text-destructive" />
+                  </Button>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs text-muted-foreground mb-3">
+                <span>النوع: <b className="text-foreground">{r.project_type || "—"}</b></span>
+                <span>الميزانية: <b className="text-foreground">{r.budget || "—"}</b></span>
+                <span>الموعد: <b className="text-foreground">{r.timeline || "—"}</b></span>
+                <span className="latin" dir="ltr">{new Date(r.created_at).toLocaleString()}</span>
+              </div>
+              {r.message && <p className="text-sm leading-[1.9] border-t border-border pt-3">{r.message}</p>}
+            </div>
+          ))}
+        </div>}
+    </div>
+  );
+}
 
 const ProcessAdmin = () => <CrudTable title="مراحل العمل" table="process_steps" queryKey="process_steps"
   defaults={{ num: "", title: "مرحلة", description: "" }}
