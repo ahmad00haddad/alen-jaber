@@ -91,6 +91,7 @@ function AdminPage() {
           <TabsContent value="content"><ContentEditor /></TabsContent>
           <TabsContent value="media"><MediaPanel /></TabsContent>
           <TabsContent value="projects"><ProjectsAdmin /></TabsContent>
+          <TabsContent value="inquiries"><InquiriesAdmin /></TabsContent>
           <TabsContent value="process"><ProcessAdmin /></TabsContent>
           <TabsContent value="stats"><StatsAdmin /></TabsContent>
           <TabsContent value="testimonials"><TestimonialsAdmin /></TabsContent>
