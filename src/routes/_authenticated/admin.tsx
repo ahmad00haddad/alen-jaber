@@ -15,7 +15,7 @@ import {
 } from "@/lib/site-data";
 import {
   LogOut, Save, Plus, Trash2, Upload, ExternalLink, Image as ImageIcon,
-  Settings, Briefcase, Quote, BarChart3, ListChecks, Wrench, Type, Link as LinkIcon, Home,
+  Settings, Briefcase, Quote, BarChart3, ListChecks, Wrench, Type, Link as LinkIcon, Home, Inbox,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
