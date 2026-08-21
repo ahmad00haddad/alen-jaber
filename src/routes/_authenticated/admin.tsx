@@ -370,7 +370,7 @@ function MediaPanel() {
 }
 
 // ============ CRUD HELPERS ============
-type Col = { k: string; l: string; type?: "text" | "textarea" | "number" | "bool"; w?: string };
+type Col = { k: string; l: string; type?: "text" | "textarea" | "number" | "bool" | "list"; w?: string };
 
 function CrudTable({ title, table, queryKey, cols, defaults }:
   { title: string; table: string; queryKey: string; cols: Col[]; defaults: Record<string, any> }) {
