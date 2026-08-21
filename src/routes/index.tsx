@@ -163,11 +163,12 @@ function Nav({ navItems, cta }: { navItems: { href: string; label: string }[]; c
 }
 
 // ============== HERO ==============
-function Hero({ hero, meta }: { hero: any; meta: any }) {
+function Hero({ hero, meta, showreel }: { hero: any; meta: any; showreel: any }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
   const opacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
+  const [reelOpen, setReelOpen] = useState(false);
 
   const name = hero.name ?? "ألن جابر";
   const tagline = hero.tagline ?? "مخرج · منتج محتوى · صانع صورة";
@@ -176,6 +177,7 @@ function Hero({ hero, meta }: { hero: any; meta: any }) {
   const ctaS = hero.cta_secondary ?? "للتعاون";
   const badge = hero.badge ?? "ALEN · ON SET";
   const image = hero.image_url || alenAsset.url;
+  const reelUrl = showreel?.url as string | undefined;
 
   return (
     <section ref={ref} id="top" className="relative pt-32 md:pt-36 pb-16 md:pb-24 px-5 md:px-10 lg:px-14 grain min-h-screen flex items-center">
