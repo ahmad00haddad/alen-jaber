@@ -54,7 +54,7 @@ function Index() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Nav navItems={navItems} cta={settings?.nav_cta ?? {}} />
-      <Hero hero={settings?.hero ?? {}} meta={settings?.hero_meta ?? {}} />
+      <Hero hero={settings?.hero ?? {}} meta={settings?.hero_meta ?? {}} showreel={settings?.showreel ?? {}} />
       <Marquee />
       <Manifesto manifesto={settings?.manifesto ?? {}} />
       <Stats />
@@ -64,6 +64,7 @@ function Index() {
       <SkillsSection intro={settings?.skills_intro ?? {}} />
       <Process intro={settings?.process_intro ?? {}} />
       <Voices intro={settings?.voices_intro ?? {}} />
+      <InquiryForm intro={settings?.inquiry ?? {}} />
       <Contact contact={settings?.contact ?? {}} cv={settings?.cv ?? {}} />
       <BigMark big={settings?.big_mark ?? {}} />
       <Footer footer={settings?.footer ?? {}} social={settings?.social ?? {}} navItems={navItems} cv={settings?.cv ?? {}} />
