@@ -270,6 +270,9 @@ function Hero({ hero, meta, showreel }: { hero: any; meta: any; showreel: any })
           <span className="w-px h-10 bg-gradient-to-b from-brass to-transparent" />
         </motion.div>
       </motion.div>
+      {reelUrl && (
+        <ShowreelModal url={reelUrl} title={showreel?.title} open={reelOpen} onClose={() => setReelOpen(false)} />
+      )}
     </section>
   );
 }
