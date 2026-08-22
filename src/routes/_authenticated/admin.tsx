@@ -11,11 +11,12 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import {
   useSettings, useProjects, useTestimonials, useStats, useProcessSteps,
-  useServices, useMarqueeWords, useNavLinks,
+  useServices, useMarqueeWords, useNavLinks, useExperiences, useSkills,
 } from "@/lib/site-data";
 import {
   LogOut, Save, Plus, Trash2, Upload, ExternalLink, Image as ImageIcon,
   Settings, Briefcase, Quote, BarChart3, ListChecks, Wrench, Type, Link as LinkIcon, Home, Inbox,
+  GraduationCap, Sparkles, Eye, Copy, FileText,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
