@@ -50,27 +50,30 @@ function Index() {
   const { data: settings } = useSettings();
   const navLinks = useNavLinks().data;
   const navItems = (navLinks && navLinks.length ? navLinks.map((n) => ({ href: n.href, label: n.label })) : DEF_NAV);
+  const sections = settings?.sections ?? {};
+  const on = (k: string) => sections[k] !== false;
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Nav navItems={navItems} cta={settings?.nav_cta ?? {}} />
-      <Hero hero={settings?.hero ?? {}} meta={settings?.hero_meta ?? {}} showreel={settings?.showreel ?? {}} />
-      <Marquee />
-      <Manifesto manifesto={settings?.manifesto ?? {}} />
-      <Stats />
-      <About about={settings?.about ?? {}} />
-      <Works intro={settings?.works_intro ?? {}} />
-      <Experience intro={settings?.experience_intro ?? {}} cv={settings?.cv ?? {}} />
-      <SkillsSection intro={settings?.skills_intro ?? {}} />
-      <Process intro={settings?.process_intro ?? {}} />
-      <Voices intro={settings?.voices_intro ?? {}} />
-      <InquiryForm intro={settings?.inquiry ?? {}} />
-      <Contact contact={settings?.contact ?? {}} cv={settings?.cv ?? {}} />
-      <BigMark big={settings?.big_mark ?? {}} />
-      <Footer footer={settings?.footer ?? {}} social={settings?.social ?? {}} navItems={navItems} cv={settings?.cv ?? {}} />
+      <Hero hero={settings?.hero ?? {}} meta={settings?.hero_meta ?? {}} showreel={settings?.showreel ?? {}} cv={settings?.cv ?? {}} />
+      {on("marquee") && <Marquee />}
+      {on("manifesto") && <Manifesto manifesto={settings?.manifesto ?? {}} />}
+      {on("stats") && <Stats />}
+      {on("about") && <About about={settings?.about ?? {}} />}
+      {on("works") && <Works intro={settings?.works_intro ?? {}} />}
+      {on("experience") && <Experience intro={settings?.experience_intro ?? {}} cv={settings?.cv ?? {}} />}
+      {on("skills") && <SkillsSection intro={settings?.skills_intro ?? {}} />}
+      {on("process") && <Process intro={settings?.process_intro ?? {}} />}
+      {on("voices") && <Voices intro={settings?.voices_intro ?? {}} />}
+      {on("inquiry") && <InquiryForm intro={settings?.inquiry ?? {}} />}
+      {on("contact") && <Contact contact={settings?.contact ?? {}} cv={settings?.cv ?? {}} />}
+      {on("big_mark") && <BigMark big={settings?.big_mark ?? {}} />}
+      {on("footer") && <Footer footer={settings?.footer ?? {}} social={settings?.social ?? {}} navItems={navItems} cv={settings?.cv ?? {}} />}
     </div>
   );
 }
+
 
 // ============== MANIFESTO ==============
 function Manifesto({ manifesto }: { manifesto: any }) {
