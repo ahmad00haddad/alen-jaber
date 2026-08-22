@@ -92,10 +92,13 @@ function AdminPage() {
           </TabsList>
 
           <TabsContent value="dashboard"><Dashboard go={setTab} /></TabsContent>
+          <TabsContent value="sections"><SectionsPanel /></TabsContent>
           <TabsContent value="content"><ContentEditor /></TabsContent>
           <TabsContent value="media"><MediaPanel /></TabsContent>
           <TabsContent value="projects"><ProjectsAdmin /></TabsContent>
           <TabsContent value="inquiries"><InquiriesAdmin /></TabsContent>
+          <TabsContent value="experiences"><ExperiencesAdmin /></TabsContent>
+          <TabsContent value="skills"><SkillsAdmin /></TabsContent>
           <TabsContent value="process"><ProcessAdmin /></TabsContent>
           <TabsContent value="stats"><StatsAdmin /></TabsContent>
           <TabsContent value="testimonials"><TestimonialsAdmin /></TabsContent>
