@@ -166,7 +166,7 @@ function Nav({ navItems, cta }: { navItems: { href: string; label: string }[]; c
 }
 
 // ============== HERO ==============
-function Hero({ hero, meta, showreel }: { hero: any; meta: any; showreel: any }) {
+function Hero({ hero, meta, showreel, cv }: { hero: any; meta: any; showreel: any; cv: any }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
