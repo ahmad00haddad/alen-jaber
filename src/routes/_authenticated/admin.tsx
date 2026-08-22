@@ -41,10 +41,13 @@ function AdminPage() {
 
   const tabs = [
     { v: "dashboard", l: "نظرة عامة", icon: Home },
+    { v: "sections", l: "إظهار الأقسام", icon: Eye },
     { v: "content", l: "نصوص الموقع", icon: Settings },
     { v: "media", l: "الوسائط", icon: ImageIcon },
     { v: "projects", l: "الأعمال", icon: Briefcase },
     { v: "inquiries", l: "طلبات المشاريع", icon: Inbox },
+    { v: "experiences", l: "الخبرات", icon: GraduationCap },
+    { v: "skills", l: "المهارات", icon: Sparkles },
     { v: "process", l: "مراحل العمل", icon: ListChecks },
     { v: "stats", l: "الأرقام", icon: BarChart3 },
     { v: "testimonials", l: "الشهادات", icon: Quote },
