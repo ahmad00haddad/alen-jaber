@@ -211,10 +211,24 @@ const CONTENT_SECTIONS: { key: string; title: string; fields: FieldDef[] }[] = [
     { k: "label", l: "اللصيقة" },
     { k: "meta", l: "نص جانبي" },
   ]},
+  { key: "experience_intro", title: "مقدمة الخبرات", fields: [
+    { k: "label", l: "اللصيقة" },
+    { k: "headline", l: "العنوان" },
+  ]},
+  { key: "skills_intro", title: "مقدمة المهارات", fields: [
+    { k: "label", l: "اللصيقة" },
+    { k: "headline", l: "العنوان" },
+  ]},
+  { key: "cv", title: "السيرة الذاتية (CV)", fields: [
+    { k: "label", l: "نص زر التحميل" },
+    { k: "filename", l: "اسم الملف" },
+    { k: "url", l: "رابط الملف", type: "url" },
+  ]},
   { key: "contact", title: "التواصل", fields: [
     { k: "label", l: "اللصيقة" },
     { k: "headline", l: "العنوان الكبير (يقبل سطرين)", type: "textarea" },
     { k: "email", l: "البريد الإلكتروني" },
+    { k: "phone", l: "رقم الهاتف" },
   ]},
   { key: "big_mark", title: "العلامة الكبيرة (Big Mark)", fields: [
     { k: "left", l: "يسار" },
