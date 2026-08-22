@@ -386,9 +386,186 @@ function MediaPanel() {
           </div>
         </div>
       </div>
+
+      <MediaLibrary />
+      <CvPanel />
     </div>
   );
 }
+
+// ============ MEDIA LIBRARY ============
+function MediaLibrary() {
+  const [items, setItems] = useState<{ name: string; url: string }[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+
+  const load = async () => {
+    setLoading(true);
+    const { data, error } = await supabase.storage.from("site-images").list("", { limit: 100, sortBy: { column: "created_at", order: "desc" } });
+    if (error) { toast.error(error.message); setLoading(false); return; }
+    const files = (data ?? []).filter((f) => f.id);
+    const signed = await Promise.all(files.map(async (f) => {
+      const { data: s } = await supabase.storage.from("site-images").createSignedUrl(f.name, 60 * 60 * 24 * 365 * 5);
+      return { name: f.name, url: s?.signedUrl ?? "" };
+    }));
+    setItems(signed);
+    setLoading(false);
+  };
+  useEffect(() => { load(); }, []);
+
+  const upload = async (files: FileList) => {
+    setUploading(true);
+    for (const file of Array.from(files)) {
+      const path = `img-${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.\-_]/g, "_")}`;
+      const { error } = await supabase.storage.from("site-images").upload(path, file, { upsert: true });
+      if (error) toast.error("فشل رفع " + file.name);
+    }
+    setUploading(false);
+    toast.success("تم الرفع");
+    load();
+  };
+
+  const remove = async (name: string) => {
+    if (!confirm("حذف الصورة؟")) return;
+    const { error } = await supabase.storage.from("site-images").remove([name]);
+    if (error) toast.error(error.message); else { toast.success("حُذفت"); load(); }
+  };
+
+  return (
+    <div className="border border-border bg-card/30 p-5 md:p-6">
+      <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
+        <div>
+          <h3 className="font-display text-lg md:text-xl">مكتبة الصور</h3>
+          <p className="text-xs text-muted-foreground mt-1">ارفع صور الأعمال والمعارض، ثم انسخ الرابط والصقه في حقول الأعمال.</p>
+        </div>
+        <label className="inline-flex items-center gap-2 border border-dashed border-brass/40 px-4 py-2.5 cursor-pointer hover:bg-brass/5 transition text-sm">
+          <Upload className="w-4 h-4 text-brass" />
+          {uploading ? "جارٍ الرفع..." : "رفع صور"}
+          <input type="file" accept="image/*" multiple className="hidden" disabled={uploading}
+            onChange={(e) => e.target.files?.length && upload(e.target.files)} />
+        </label>
+      </div>
+      {loading ? <p className="text-sm text-muted-foreground">جارٍ التحميل...</p> :
+       items.length === 0 ? <p className="text-sm text-muted-foreground border border-dashed border-border p-8 text-center">لا توجد صور بعد.</p> :
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          {items.map((it) => (
+            <div key={it.name} className="border border-border bg-background overflow-hidden group">
+              <div className="aspect-square bg-secondary/40">
+                <img src={it.url} alt={it.name} className="w-full h-full object-cover" loading="lazy" />
+              </div>
+              <div className="p-2 flex items-center justify-between gap-1">
+                <Button size="sm" variant="ghost" className="text-[10px] px-2"
+                  onClick={() => { navigator.clipboard.writeText(it.url); toast.success("نُسخ الرابط"); }}>
+                  <Copy className="w-3 h-3 ml-1" /> نسخ
+                </Button>
+                <Button size="sm" variant="ghost" className="px-2" onClick={() => remove(it.name)}>
+                  <Trash2 className="w-3 h-3 text-destructive" />
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>}
+    </div>
+  );
+}
+
+// ============ CV UPLOAD ============
+function CvPanel() {
+  const { data, refetch } = useSettings();
+  const cv = data?.cv ?? {};
+  const [uploading, setUploading] = useState(false);
+
+  const save = async (patch: Record<string, any>) => {
+    const { error } = await sb.from("site_settings").upsert({ key: "cv", value: { ...cv, ...patch } });
+    if (error) toast.error("فشل الحفظ"); else { toast.success("تم الحفظ"); refetch(); }
+  };
+
+  const upload = async (file: File) => {
+    setUploading(true);
+    const path = `cv-${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.\-_]/g, "_")}`;
+    const { error } = await supabase.storage.from("site-images").upload(path, file, { upsert: true });
+    if (error) { setUploading(false); toast.error("فشل الرفع: " + error.message); return; }
+    const { data: signed } = await supabase.storage.from("site-images").createSignedUrl(path, 60 * 60 * 24 * 365 * 5);
+    if (signed?.signedUrl) await save({ url: signed.signedUrl, filename: file.name });
+    setUploading(false);
+  };
+
+  return (
+    <div className="border border-border bg-card/30 p-5 md:p-6">
+      <h3 className="font-display text-lg md:text-xl mb-4">ملف السيرة الذاتية</h3>
+      <div className="flex flex-wrap items-center gap-4">
+        <label className="inline-flex items-center gap-2 border border-dashed border-brass/40 px-4 py-2.5 cursor-pointer hover:bg-brass/5 transition text-sm">
+          <FileText className="w-4 h-4 text-brass" />
+          {uploading ? "جارٍ الرفع..." : "رفع ملف جديد (PDF / DOCX)"}
+          <input type="file" accept=".pdf,.doc,.docx" className="hidden" disabled={uploading}
+            onChange={(e) => e.target.files?.[0] && upload(e.target.files[0])} />
+        </label>
+        {cv.url && (
+          <a href={cv.url} target="_blank" rel="noreferrer" className="text-xs text-brass underline latin" dir="ltr">
+            {cv.filename ?? "CV"}
+          </a>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ============ SECTIONS VISIBILITY ============
+const SECTION_TOGGLES = [
+  { k: "marquee", l: "الشريط المتحرك" },
+  { k: "manifesto", l: "البيان" },
+  { k: "stats", l: "الأرقام" },
+  { k: "about", l: "عـنّـي" },
+  { k: "works", l: "الأعمال" },
+  { k: "experience", l: "الخبرات" },
+  { k: "skills", l: "المهارات" },
+  { k: "process", l: "مراحل العمل" },
+  { k: "voices", l: "الشهادات" },
+  { k: "inquiry", l: "طلب المشروع" },
+  { k: "contact", l: "التواصل" },
+  { k: "big_mark", l: "العلامة الكبيرة" },
+  { k: "footer", l: "التذييل" },
+];
+
+function SectionsPanel() {
+  const { data, refetch } = useSettings();
+  const value = data?.sections ?? {};
+  const [form, setForm] = useState<Record<string, any>>(value);
+  const [saving, setSaving] = useState(false);
+  useEffect(() => { setForm(value); }, [data]);
+
+  const save = async () => {
+    setSaving(true);
+    const { error } = await sb.from("site_settings").upsert({ key: "sections", value: form });
+    setSaving(false);
+    if (error) toast.error("فشل الحفظ: " + error.message); else { toast.success("تم الحفظ"); refetch(); }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <div>
+          <h3 className="font-display text-2xl">إظهار وإخفاء الأقسام</h3>
+          <p className="text-sm text-muted-foreground mt-1">تحكّم بما يظهر في الصفحة الرئيسية.</p>
+        </div>
+        <Button onClick={save} disabled={saving} className="bg-brass text-brass-foreground hover:bg-brass/90">
+          <Save className="w-3.5 h-3.5 ml-1.5" /> {saving ? "حفظ..." : "حفظ"}
+        </Button>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {SECTION_TOGGLES.map((s) => (
+          <div key={s.k} className="border border-border bg-card/30 p-4 flex items-center justify-between gap-3">
+            <span className="text-sm">{s.l}</span>
+            <Switch checked={form[s.k] !== false}
+              onCheckedChange={(v) => setForm({ ...form, [s.k]: v })} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
 
 // ============ CRUD HELPERS ============
 type Col = { k: string; l: string; type?: "text" | "textarea" | "number" | "bool" | "list"; w?: string };
