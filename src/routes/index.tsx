@@ -50,27 +50,30 @@ function Index() {
   const { data: settings } = useSettings();
   const navLinks = useNavLinks().data;
   const navItems = (navLinks && navLinks.length ? navLinks.map((n) => ({ href: n.href, label: n.label })) : DEF_NAV);
+  const sections = settings?.sections ?? {};
+  const on = (k: string) => sections[k] !== false;
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Nav navItems={navItems} cta={settings?.nav_cta ?? {}} />
-      <Hero hero={settings?.hero ?? {}} meta={settings?.hero_meta ?? {}} showreel={settings?.showreel ?? {}} />
-      <Marquee />
-      <Manifesto manifesto={settings?.manifesto ?? {}} />
-      <Stats />
-      <About about={settings?.about ?? {}} />
-      <Works intro={settings?.works_intro ?? {}} />
-      <Experience intro={settings?.experience_intro ?? {}} cv={settings?.cv ?? {}} />
-      <SkillsSection intro={settings?.skills_intro ?? {}} />
-      <Process intro={settings?.process_intro ?? {}} />
-      <Voices intro={settings?.voices_intro ?? {}} />
-      <InquiryForm intro={settings?.inquiry ?? {}} />
-      <Contact contact={settings?.contact ?? {}} cv={settings?.cv ?? {}} />
-      <BigMark big={settings?.big_mark ?? {}} />
-      <Footer footer={settings?.footer ?? {}} social={settings?.social ?? {}} navItems={navItems} cv={settings?.cv ?? {}} />
+      <Hero hero={settings?.hero ?? {}} meta={settings?.hero_meta ?? {}} showreel={settings?.showreel ?? {}} cv={settings?.cv ?? {}} />
+      {on("marquee") && <Marquee />}
+      {on("manifesto") && <Manifesto manifesto={settings?.manifesto ?? {}} />}
+      {on("stats") && <Stats />}
+      {on("about") && <About about={settings?.about ?? {}} />}
+      {on("works") && <Works intro={settings?.works_intro ?? {}} />}
+      {on("experience") && <Experience intro={settings?.experience_intro ?? {}} cv={settings?.cv ?? {}} />}
+      {on("skills") && <SkillsSection intro={settings?.skills_intro ?? {}} />}
+      {on("process") && <Process intro={settings?.process_intro ?? {}} />}
+      {on("voices") && <Voices intro={settings?.voices_intro ?? {}} />}
+      {on("inquiry") && <InquiryForm intro={settings?.inquiry ?? {}} />}
+      {on("contact") && <Contact contact={settings?.contact ?? {}} cv={settings?.cv ?? {}} />}
+      {on("big_mark") && <BigMark big={settings?.big_mark ?? {}} />}
+      {on("footer") && <Footer footer={settings?.footer ?? {}} social={settings?.social ?? {}} navItems={navItems} cv={settings?.cv ?? {}} />}
     </div>
   );
 }
+
 
 // ============== MANIFESTO ==============
 function Manifesto({ manifesto }: { manifesto: any }) {
@@ -163,7 +166,7 @@ function Nav({ navItems, cta }: { navItems: { href: string; label: string }[]; c
 }
 
 // ============== HERO ==============
-function Hero({ hero, meta, showreel }: { hero: any; meta: any; showreel: any }) {
+function Hero({ hero, meta, showreel, cv }: { hero: any; meta: any; showreel: any; cv: any }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
@@ -227,10 +230,12 @@ function Hero({ hero, meta, showreel }: { hero: any; meta: any; showreel: any })
                 className="inline-flex items-center gap-3 border border-brass/60 text-brass px-6 py-3 font-display text-sm md:text-base hover:bg-brass/10 transition-colors">
                 <Mail className="w-4 h-4" /> {ctaS}
               </a>
-              <a href="/__l5e/assets-v1/f95193d3-bf76-4de6-a6d2-fd1a9e065004/Alen_Jaber_CV.docx" download
-                className="group inline-flex items-center gap-3 border border-brass/40 text-foreground/85 px-6 py-3 font-display text-sm md:text-base hover:text-brass hover:border-brass transition-colors">
-                <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" /> حمّل السيرة
-              </a>
+              {cv?.url && (
+                <a href={cv.url} download
+                  className="group inline-flex items-center gap-3 border border-brass/40 text-foreground/85 px-6 py-3 font-display text-sm md:text-base hover:text-brass hover:border-brass transition-colors">
+                  <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" /> {cv.label ?? "حمّل السيرة"}
+                </a>
+              )}
             </motion.div>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 1.2 }}
               className="mt-12 md:mt-14 flex items-center gap-6 md:gap-10 justify-center md:justify-start text-xs latin text-muted-foreground border-t border-border pt-6">
