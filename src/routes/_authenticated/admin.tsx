@@ -117,12 +117,28 @@ function Dashboard({ go }: { go: (v: string) => void }) {
   const testimonials = useTestimonials();
   const stats = useStats();
   const steps = useProcessSteps();
+  const experiences = useExperiences();
+  const skills = useSkills();
+  const services = useServices();
+  const marquee = useMarqueeWords();
+  const nav = useNavLinks();
+  const [inquiries, setInquiries] = useState(0);
+  useEffect(() => {
+    sb.from("project_inquiries").select("id", { count: "exact", head: true })
+      .then(({ count }: any) => setInquiries(count ?? 0));
+  }, []);
 
   const cards = [
     { l: "الأعمال", n: projects.data?.length ?? 0, k: "projects", icon: Briefcase },
+    { l: "طلبات المشاريع", n: inquiries, k: "inquiries", icon: Inbox },
+    { l: "الخبرات", n: experiences.data?.length ?? 0, k: "experiences", icon: GraduationCap },
+    { l: "المهارات", n: skills.data?.length ?? 0, k: "skills", icon: Sparkles },
     { l: "الشهادات", n: testimonials.data?.length ?? 0, k: "testimonials", icon: Quote },
     { l: "الأرقام", n: stats.data?.length ?? 0, k: "stats", icon: BarChart3 },
     { l: "مراحل العمل", n: steps.data?.length ?? 0, k: "process", icon: ListChecks },
+    { l: "الخدمات", n: services.data?.length ?? 0, k: "services", icon: Wrench },
+    { l: "كلمات الشريط", n: marquee.data?.length ?? 0, k: "marquee", icon: Type },
+    { l: "روابط القائمة", n: nav.data?.length ?? 0, k: "nav", icon: LinkIcon },
   ];
 
   return (
@@ -814,4 +830,21 @@ const NavAdmin = () => <CrudTable title="روابط القائمة" table="nav_l
   cols={[
     { k: "label", l: "النص المعروض", w: "md:col-span-5" },
     { k: "href", l: "الرابط", w: "md:col-span-4" },
+  ]} />;
+
+const ExperiencesAdmin = () => <CrudTable title="الخبرات المهنية" table="experiences" queryKey="experiences"
+  defaults={{ role: "دور جديد", company: "", period: "", location: "", bullets: [] }}
+  cols={[
+    { k: "role", l: "المسمى الوظيفي", w: "md:col-span-3" },
+    { k: "company", l: "الجهة", w: "md:col-span-2" },
+    { k: "period", l: "الفترة", w: "md:col-span-2" },
+    { k: "location", l: "الموقع", w: "md:col-span-2" },
+    { k: "bullets", l: "النقاط (سطر لكل نقطة)", type: "list", w: "md:col-span-9" },
+  ]} />;
+
+const SkillsAdmin = () => <CrudTable title="المهارات" table="skills" queryKey="skills"
+  defaults={{ category: "فئة جديدة", items: [] }}
+  cols={[
+    { k: "category", l: "الفئة", w: "md:col-span-3" },
+    { k: "items", l: "العناصر (سطر لكل عنصر)", type: "list", w: "md:col-span-6" },
   ]} />;
