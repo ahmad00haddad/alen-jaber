@@ -815,3 +815,20 @@ const NavAdmin = () => <CrudTable title="روابط القائمة" table="nav_l
     { k: "label", l: "النص المعروض", w: "md:col-span-5" },
     { k: "href", l: "الرابط", w: "md:col-span-4" },
   ]} />;
+
+const ExperiencesAdmin = () => <CrudTable title="الخبرات المهنية" table="experiences" queryKey="experiences"
+  defaults={{ role: "دور جديد", company: "", period: "", location: "", bullets: [] }}
+  cols={[
+    { k: "role", l: "المسمى الوظيفي", w: "md:col-span-3" },
+    { k: "company", l: "الجهة", w: "md:col-span-2" },
+    { k: "period", l: "الفترة", w: "md:col-span-2" },
+    { k: "location", l: "الموقع", w: "md:col-span-2" },
+    { k: "bullets", l: "النقاط (سطر لكل نقطة)", type: "list", w: "md:col-span-9" },
+  ]} />;
+
+const SkillsAdmin = () => <CrudTable title="المهارات" table="skills" queryKey="skills"
+  defaults={{ category: "فئة جديدة", items: [] }}
+  cols={[
+    { k: "category", l: "الفئة", w: "md:col-span-3" },
+    { k: "items", l: "العناصر (سطر لكل عنصر)", type: "list", w: "md:col-span-6" },
+  ]} />;
