@@ -454,6 +454,15 @@ function Works({ intro }: { intro: any }) {
             );
           })}
         </motion.div>
+
+        <div className="mt-10 flex flex-wrap gap-3">
+          <Link to="/work" className="inline-flex items-center gap-2 text-xs md:text-sm latin border border-brass/50 text-brass px-5 py-3 hover:bg-brass hover:text-brass-foreground transition-colors">
+            كل الأعمال <ArrowUpLeft className="w-4 h-4" />
+          </Link>
+          <Link to="/contact" className="inline-flex items-center gap-2 text-xs md:text-sm latin border border-border text-muted-foreground px-5 py-3 hover:border-brass/60 hover:text-brass transition-colors">
+            اطلب مشروعك
+          </Link>
+        </div>
       </div>
     </section>
   );
