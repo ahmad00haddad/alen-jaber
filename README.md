@@ -1,48 +1,54 @@
-# Allen Jaber: Creative Vision
+# Alen Jaber - Creative Portfolio 🎬
 
-بدي تقلد هذا الويبسايت المرفق كتصميم وتبني لي بورتفوليو لشخص مخرج اعلانات وافلام وبروديوسر او منتج بالمجال الفني الابداعي وممثل , اسمه " ألن جابر " allen jaber 
-ارفقت لك صورة له ايضا ..
-هو ايضا Content Creator
-الاسم الظاهر: Alen jaber.
+مرحباً بك في المستودع الرسمي لموقع البورتفوليو الخاص بـ **ألن جابر (Alen Jaber)**.
+هذا الموقع يمثل الواجهة الرقمية الإبداعية لمخرج الإعلانات، المنتج، الممثل، وصانع المحتوى ألن جابر، ويعكس هويته الفنية ورؤيته في صناعة المحتوى البصري.
 
-الموقع: Irbid, Jordan.
+## 🌟 الرؤية والفكرة
 
-المسمى الوظيفي الحالي: Content Creator.
+تم تصميم هذا الموقع بهوية عربية أصيلة ولغة فصحى بليغة، ليكون المنصة الرئيسية التي تستعرض مسيرة **ألن جابر** في مجال الإنتاج الإبداعي.
+الموقع مصمم ليعكس طابعاً سينمائياً وإبداعياً يليق بصانع محتوى ومخرج يعمل على تحويل الأفكار إلى واقع ملموس، بدءاً من ابتكار الأفكار وكتابة السيناريو، وصولاً إلى الإشراف على التنفيذ الكامل في موقع التصوير.
 
-جهة العمل الحالية: FOX Multimedia Services.
+## 👤 نبذة عن ألن جابر (About Alen)
 
-المجال: صناعة المحتوى والإنتاج الإبداعي
-حسابه على لينكد ان 
-https://www.linkedin.com/in/alen-jaber-047198364
+ألن جابر هو صانع محتوى (Content Creator)، مخرج، ومنتج من إربد، الأردن. يعمل حالياً في **FOX Multimedia Services**.
+يتخصص ألن في إنتاج المحتوى البصري الإبداعي للإعلانات التجارية، ويدير سير العمل الإنتاجي بالكامل (End-to-End Solutions) للمشاريع المصورة.
 
-About
+- **التعليم:** درجة البكالوريوس في الصحافة والإعلام - جامعة جدارا (2014 - 2018).
+- **المجال:** صناعة المحتوى، الإنتاج الإبداعي، والإخراج الفني.
 
-I specialize in creative visual content production for commercial advertising — from ideation and scriptwriting to crafting call sheets and overseeing full on-set execution as a director. Additionally, I manage complete production workflows, delivering end-to-end solutions for filmed projects.
+## ✨ أبرز مميزات الموقع (Key Features)
 
-الويبسايت يجب ان يكون بهوية عربية ولغة عربيه اصيلة وفصحى بليغة .
+- 🎨 **تصميم إبداعي:** واجهة مستخدم تعكس الهوية البصرية لمخرج سينمائي مبدع.
+- 🖋️ **هوية عربية أصيلة:** نصوص ومحتوى مصاغ بلغة عربية فصحى بليغة تعبر عن الاحترافية.
+- 🎬 **معرض الأعمال (Portfolio):** استعراض شامل لأهم المشاريع، الإعلانات، والأعمال الفنية.
+- 📱 **روابط التواصل:** سهولة الوصول والتواصل المباشر لمناقشة المشاريع القادمة.
 
-Education: 
-Jadara university -Bachelor's degree, Communication and Media StudiesMar 2014 - Sep 2018
+## 🔗 التواصل والمتابعة (Connect)
 
-This project was built with [Lovable](https://lovable.dev).
+- [LinkedIn - Alen Jaber](https://www.linkedin.com/in/alen-jaber-047198364)
 
-**Live app**: https://alen-jaber.lovable.app
+## 🚀 المعاينة المباشرة (Live Demo)
 
-## Build with Lovable
+**يمكنك زيارة الموقع ورؤية الإبداع من خلال الرابط التالي:** [alen-jaber.lovable.app](https://alen-jaber.lovable.app)
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/f02bd657-51fd-4cdc-812a-eee7a2f265a3).
+---
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+## 💻 التطوير والتقنيات (Development)
 
-## Development
+تم بناء هذا المشروع باستخدام أحدث تقنيات تطوير الويب بالاعتماد على منصة [Lovable](https://lovable.dev) لتجربة مستخدم سلسة وأداء عالي.
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+### التشغيل المحلي (Local Development)
+
+إذا كنت ترغب في تشغيل المشروع على جهازك:
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+# استنساخ المستودع
+git clone https://github.com/ahmad00haddad/alen-jaber.git
+cd alen-jaber
+
+# تثبيت الحزم
+npm install
+
+# تشغيل خادم التطوير
 npm run dev
 ```
