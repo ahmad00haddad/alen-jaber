@@ -10,6 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { ScrollProgress, BackToTop } from "@/components/site/Interactions";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -79,16 +80,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "A portfolio website showcasing the creative work of Allen Jaber, a director, producer, and content creator." },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "A portfolio website showcasing the creative work of Allen Jaber, a director, producer, and content creator." },
+      { title: "ألِن جابر — مخرج ومنتج إبداعي" },
+      { name: "description", content: "بورتفوليو ألِن جابر: إخراج إعلانات وأفلام وإنتاج محتوى بصري إبداعي من إربد، الأردن." },
+      { name: "author", content: "Alen Jaber" },
+      { property: "og:title", content: "ألِن جابر — مخرج ومنتج إبداعي" },
+      { property: "og:description", content: "إخراج إعلاني وسينمائي وإنتاج محتوى بصري بحسٍّ معاصر." },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "Lovable App" },
-      { name: "twitter:description", content: "A portfolio website showcasing the creative work of Allen Jaber, a director, producer, and content creator." },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "ألِن جابر — مخرج ومنتج إبداعي" },
+      { name: "twitter:description", content: "إخراج إعلاني وسينمائي وإنتاج محتوى بصري بحسٍّ معاصر." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/39827a0e-175f-479e-81ba-7d3d3f11fbb5/id-preview-75d463cd--f02bd657-51fd-4cdc-812a-eee7a2f265a3.lovable.app-1780567155076.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/39827a0e-175f-479e-81ba-7d3d3f11fbb5/id-preview-75d463cd--f02bd657-51fd-4cdc-812a-eee7a2f265a3.lovable.app-1780567155076.png" },
     ],
@@ -113,7 +113,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="ar" dir="rtl">
       <head>
         <HeadContent />
       </head>
@@ -131,7 +131,9 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthSync />
+      <ScrollProgress />
       <Outlet />
+      <BackToTop />
       <Toaster richColors position="top-center" />
     </QueryClientProvider>
   );
